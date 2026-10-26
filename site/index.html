@@ -21,250 +21,409 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://oiloop.com/#org", "name": "OI:LOOP", "alternateName": ["OILOOP", "OI LOOP", "oiloop", "Optical Integration Loop", "OpIntLoop"], "url": "https://oiloop.com", "logo": "https://oiloop.com/logo.png", "email": "info@oiloop.com", "slogan": "Weights in Light. Compute in Motion.", "sameAs": ["https://www.linkedin.com/company/oiloop/", "https://x.com/OpIntLoop", "https://www.instagram.com/o.i.l.o.o.p/", "https://github.com/OpIntLoop"], "description": "OI:LOOP prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility.", "knowsAbout": ["photonic computing", "optical neural networks", "AI inference", "passive optical matrix multiplication", "energy-efficient AI"], "founder": {"@type": "Person", "name": "Ali Can Efe", "jobTitle": "Founder and CTO"}}, {"@type": "Product", "name": "PMP-1550 Zero-Gate Passive Matrix Processor", "brand": {"@id": "https://oiloop.com/#org"}, "category": "Optical AI inference processor", "description": "A glass panel carrying a model's weights as printed optical paths. One pass of 1550 nm light performs every multiplication of a matrix at once. In development; not for sale."}, {"@type": "WebSite", "@id": "https://oiloop.com/#site", "name": "OI:LOOP", "url": "https://oiloop.com", "publisher": {"@id": "https://oiloop.com/#org"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is OI:LOOP?", "acceptedAnswer": {"@type": "Answer", "text": "OI:LOOP is an early-stage company that prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility. It does not sell chips."}}, {"@type": "Question", "name": "How does a passive optical processor run an AI model?", "acceptedAnswer": {"@type": "Answer", "text": "The input is written onto 1550 nm light. The light passes a glass panel where each printed path transmits a fixed share of light, and that share is the weight. Detectors sum the products. Every multiplication of a matrix happens in one pass of light, and electronics handle activations and attention."}}, {"@type": "Question", "name": "How much energy can it save?", "acceptedAnswer": {"@type": "Answer", "text": "In OI:LOOP's core-level design model, the passive bank uses 3.3–6.3 femtojoules per multiply, 30–60 times less than a current flagship GPU at about 200 fJ. This is a design model, not yet a measurement."}}, {"@type": "Question", "name": "Why does the weight bank use no power?", "acceptedAnswer": {"@type": "Answer", "text": "The weights are fixed optical paths, not memory cells. There are no heaters, transistors or clocks in the bank, so it draws 0 W. Power goes to the laser, modulators, detectors and converters."}}, {"@type": "Question", "name": "Which models will OI:LOOP run?", "acceptedAnswer": {"@type": "Answer", "text": "First a half-billion-parameter language model end to end, then a ~100B-class mixture-of-experts pilot, then 700B-class models. One printed panel set carries one model version."}}, {"@type": "Question", "name": "What stage is OI:LOOP at?", "acceptedAnswer": {"@type": "Answer", "text": "Architecture, material choice, energy model and accuracy simulation are complete. Nothing has been fabricated yet. The next milestone is printing and measuring an 8×8 weight bank, then a 64×64 tile."}}, {"@type": "Question", "name": "Why 1550 nm?", "acceptedAnswer": {"@type": "Answer", "text": "1550 nm is the wavelength of fibre-optic networks, so lasers, fibres, modulators and detectors are mature, low-cost telecom parts."}}, {"@type": "Question", "name": "How do I get access?", "acceptedAnswer": {"@type": "Answer", "text": "Join the early waitlist on oiloop.com, write to info@oiloop.com, or connect your AI assistant to the OI:LOOP MCP server at https://oiloop.com/mcp."}}]}]}</script>
 <title>OI:LOOP</title>
 <meta name="description" content="OI:LOOP prints AI model weights into passive optical processors (PMP-1550) and sells low-cost AI inference tokens. One pass of light performs every multiplication; 30–60× less energy per multiply in its design model.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Newsreader:ital,opsz,wght@1,6..72,300&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap">
 <style>
-/* Layout: product site. Full-bleed bands alternating cavity tones; the emblem is the hero; each band carries one live visual (emblem, parallel multiply, chip, facility fill). Single deliberate dark theme per the brand book. */
+/* Layout: a lab instrument in a dark cavity (brand book REV.5, single dark theme).
+   12-column grid; every figure is a reticle-cornered schematic panel; a dashed optical axis threads the chapters,
+   and the chapters follow one token around the Optical Integration Loop. Laser red marks signal paths only. */
+@property --rl { syntax: "<length>"; inherits: true; initial-value: 8px; }
+@property --rc { syntax: "<color>"; inherits: true; initial-value: rgba(230, 233, 240, .4); }
 :root{
-  --cavity:#060709; --cavity-2:#0b0d11; --cavity-3:#10131a;
-  --line:#484e5b; --line-soft:#1b1f27;
-  --silica:#e6e9f0; --silica-muted:#8c8f94; --label:#7a8291;
+  --cavity:#060709; --cavity-2:#0a0c10; --cavity-3:#0e1116;
+  --hair:#1b1f27; --grey:#484e5b; --label:#7a8291; --muted:#8c8f94; --silica:#e6e9f0;
+  --s20:rgba(230,233,240,.2); --s40:rgba(230,233,240,.4); --s75:rgba(230,233,240,.75);
   --laser:#ff1e00; --amber:#ffb800;
-  --f-display:"Plus Jakarta Sans","Helvetica Neue",Arial,sans-serif;
-  --f-axiom:"Newsreader",Georgia,"Times New Roman",serif;
-  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-  --max:1240px;
+  --f-display:"Plus Jakarta Sans","Neue Montreal","Helvetica Neue",Arial,sans-serif;
+  --f-axiom:"Newsreader","Signifier",Georgia,"Times New Roman",serif;
+  --f-mono:"JetBrains Mono","Berkeley Mono",ui-monospace,Menlo,Consolas,monospace;
+  --max:1320px; --padx:clamp(20px,4vw,48px); --rail:0px;
+  --ease:cubic-bezier(.2,.7,.1,1);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--cavity);color:var(--silica);font-family:var(--f-display);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--cavity)}
+body{margin:0;background:var(--cavity);color:var(--silica);font-family:var(--f-display);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--cavity)}
+body.menu-open{overflow:hidden}
 a{color:inherit}
+::selection{background:var(--silica);color:var(--cavity)}
 :focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-.wrap{max-width:var(--max);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
-.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--label)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+section[id]{scroll-margin-top:64px}
+
+.wrap{max-width:var(--max);margin-inline:auto;position:relative;
+  padding-left:calc(max(var(--padx), env(safe-area-inset-left,0px)) + var(--rail));
+  padding-right:max(var(--padx), env(safe-area-inset-right,0px))}
+
+/* type roles */
+.tl{font-family:var(--f-mono);font-weight:700;font-size:12px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:var(--label)}
+.data{font-family:var(--f-mono);font-size:14px;letter-spacing:.05em;color:var(--muted);font-variant-numeric:tabular-nums}
 .wm{font-weight:700;letter-spacing:-.02em;white-space:nowrap}
 .wm i{font-style:normal;color:var(--laser)}
 .wm span{font-weight:300;letter-spacing:.08em}
-h2{font-size:clamp(36px,5vw,68px);line-height:1.02;letter-spacing:-.03em;font-weight:500;margin:0;text-wrap:balance}
-.intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:56px;align-items:end;margin-bottom:56px}
-@media (max-width:900px){.intro{grid-template-columns:1fr;gap:20px}}
-.intro p{margin:0;color:var(--silica-muted);font-size:18px;max-width:34em}
-.band{padding-block:128px}
-.band.alt{background:var(--cavity-2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
-.note{font-family:var(--f-mono);font-size:12px;color:var(--label);line-height:1.6;margin-top:24px;max-width:70em}
+.note{font-family:var(--f-mono);font-size:12px;letter-spacing:.03em;color:var(--label);line-height:1.6;margin:24px 0 0;max-width:72em}
+
+/* reticle: 8 x 8 L-guides at four corners (ASML reticle format) */
+.ret,.btn::before{
+  background-image:linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc)),linear-gradient(var(--rc),var(--rc));
+  background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%;
+  background-size:var(--rl) 1px,1px var(--rl),var(--rl) 1px,1px var(--rl),var(--rl) 1px,1px var(--rl),var(--rl) 1px,1px var(--rl);
+  background-repeat:no-repeat}
+.ret{--rc:var(--s40);--rl:8px;position:relative;background-color:var(--cavity);transition:--rl .45s var(--ease),--rc .45s}
+.ret:hover{--rl:20px;--rc:var(--silica)}
+.alt .ret{background-color:var(--cavity-2)}
+
+/* buttons */
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:16px 20px;border:1px solid var(--grey);color:var(--silica);background:transparent;cursor:pointer;transition:border-color .25s,background-color .25s}
+.btn::before{content:"";position:absolute;inset:-7px;--rc:var(--laser);--rl:0px;transition:--rl .3s var(--ease);pointer-events:none}
+.btn:hover::before,.btn:focus-visible::before{--rl:9px}
+.btn:hover{border-color:var(--silica)}
+.btn.primary{background:var(--silica);color:var(--cavity);border-color:var(--silica)}
+.btn.primary:hover{background:#ffffff}
+.btn .dot{width:7px;height:7px;background:var(--laser);flex:none}
+.btn .arr{transition:transform .3s var(--ease)}
+.btn:hover .arr{transform:translateX(3px)}
+.btn.sm{padding:11px 14px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
 
 /* header */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(6,7,9,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
-header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:16px}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
-.brand svg{width:26px;height:26px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(6,7,9,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+header.top .wrap{--rail:0px;display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none}
+.brand svg{width:28px;height:28px;display:block}
 .brand .wm{font-size:20px}
-nav{display:flex;gap:28px}
-nav a{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--silica-muted);text-decoration:none}
-nav a:hover{color:var(--silica)}
-nav a.cta{color:var(--silica);border:1px solid var(--line);padding:8px 12px;margin-top:-8px}
-@media (max-width:760px){nav a:not(.cta){display:none}}
+nav.main{display:flex;align-items:center;gap:28px;scroll-target-group:auto}
+nav.main a{position:relative;font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--label);text-decoration:none;padding:10px 0}
+nav.main a.sr-only{position:absolute;padding:0}
+nav.main a:hover{color:var(--silica)}
+nav.main a:is(:target-current,.\:target-current){color:var(--silica)}
+nav.main a:is(:target-current,.\:target-current)::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:var(--laser)}
+.top-actions{display:flex;align-items:center;gap:12px}
+.menu-btn{display:none;font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--silica);background:transparent;border:1px solid var(--grey);padding:11px 14px;cursor:pointer}
+.progress{position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--laser);transform-origin:0 50%;transform:scaleX(0)}
+@media (max-width:900px){
+  nav.main{display:none}
+  .menu-btn{display:inline-flex}
+  .top-actions .btn{display:none}
+}
+#menu{position:fixed;left:0;right:0;bottom:0;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:39;background:var(--cavity);overflow-y:auto;
+  padding-left:max(var(--padx), env(safe-area-inset-left,0px));padding-right:max(var(--padx), env(safe-area-inset-right,0px));padding-block:24px 40px;display:flex;flex-direction:column;gap:32px}
+#menu nav{display:flex;flex-direction:column}
+#menu nav a{font-size:30px;font-weight:500;letter-spacing:-.02em;text-decoration:none;padding:12px 0;border-bottom:1px solid var(--hair)}
+#menu .menu-social{display:flex;flex-wrap:wrap;gap:10px 22px}
+#menu .menu-social a{font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:6px 0}
 
 /* hero */
-.hero{position:relative;padding-block:56px 96px;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(230,233,240,.028) 0 1px,transparent 1px 32px),repeating-linear-gradient(0deg,rgba(230,233,240,.028) 0 1px,transparent 1px 32px);pointer-events:none}
-.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
-@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
-.hero h1{font-size:clamp(60px,10vw,144px);line-height:.92;letter-spacing:-.04em;margin:0;font-weight:700}
-.hero .axiom{font-family:var(--f-axiom);font-style:italic;font-weight:300;font-size:clamp(28px,3.4vw,44px);line-height:1.2;margin:24px 0 0;text-wrap:balance}
-.hero .lead{font-size:19px;color:var(--silica-muted);max-width:30em;margin:28px 0 0}
-.ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
-.btn{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:15px 22px;border:1px solid var(--silica);color:var(--cavity);background:var(--silica);display:inline-flex;gap:10px;align-items:center}
-.btn.ghost{background:transparent;color:var(--silica);border-color:var(--line)}
-.btn:hover{border-color:var(--laser)}
-.btn .dot{width:8px;height:8px;background:var(--laser);display:inline-block}
-.emblem-stage{position:relative;aspect-ratio:1/1;max-width:560px;width:100%;justify-self:center}
-.emblem-stage svg{width:100%;height:100%;display:block}
-.ring{fill:none;stroke:var(--silica);stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.6s cubic-bezier(.6,0,.2,1) forwards}
-.ring.r1{animation-delay:.05s}.ring.r2{animation-delay:.25s}.ring.r3{animation-delay:.45s}.ring.r4{animation-delay:.65s}.ring.r5{animation-delay:.85s}
-@keyframes draw{to{stroke-dashoffset:0}}
-.pulse{fill:var(--laser);offset-path:path("M 205 35 L 120 120");offset-rotate:0deg;animation:travel 3.2s cubic-bezier(.5,0,.3,1) 1.6s infinite;opacity:0}
-@keyframes travel{0%{offset-distance:0%;opacity:0}8%{opacity:1}55%{offset-distance:100%;opacity:1}62%{opacity:0}100%{opacity:0;offset-distance:100%}}
-.core{fill:var(--laser);transform-origin:120px 120px;animation:hit 3.2s steps(1) 1.6s infinite}
-@keyframes hit{0%{opacity:1}54%{opacity:1}55%{opacity:.35}70%{opacity:1}}
-.stage-cap{position:absolute;left:0;right:0;bottom:-6px;display:flex;justify-content:space-between}
-@media (prefers-reduced-motion:reduce){.ring{animation:none;stroke-dashoffset:0}.pulse{display:none}.core{animation:none}}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(32px,5vw,88px);align-items:center;padding-block:clamp(40px,6vw,88px) clamp(56px,7vw,104px)}
+@media (max-width:980px){.hero .wrap{grid-template-columns:1fr}}
+.hero-copy{display:flex;flex-direction:column;gap:26px;min-width:0}
+.hero h1{margin:0;font-size:clamp(60px,7.4vw,112px);line-height:.86;letter-spacing:-.045em;font-weight:700}
+@media (max-width:980px){.hero h1{font-size:clamp(60px,16.5vw,150px)}}
+.hero .axiom{margin:0;font-family:var(--f-axiom);font-style:italic;font-weight:300;font-size:clamp(30px,3.5vw,54px);line-height:1.1;letter-spacing:.005em}
+.hero .lead{margin:0;font-size:clamp(17px,1.35vw,20px);color:var(--muted);max-width:31em}
+.hero-specs{list-style:none;margin:6px 0 0;padding:20px 0 0;border-top:1px solid var(--hair);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.hero-specs li{display:flex;flex-direction:column;gap:4px;min-width:0}
+.hero-specs b{font:400 clamp(17px,1.6vw,22px)/1.2 var(--f-mono);letter-spacing:.02em;color:var(--silica);white-space:nowrap}
+.hero-specs span{font-size:13px;line-height:1.4;color:var(--label)}
+@media (max-width:480px){.hero-specs{grid-template-columns:1fr 1fr}.hero-specs li:last-child{grid-column:1/-1}}
+.hero-copy > *{animation:rise .9s var(--ease) both}
+.hero-copy > :nth-child(2){animation-delay:.08s}
+.hero-copy > :nth-child(3){animation-delay:.16s}
+.hero-copy > :nth-child(4){animation-delay:.24s}
+.hero-copy > :nth-child(5){animation-delay:.32s}
+.hero-copy > :nth-child(6){animation-delay:.4s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
 
-/* scale band */
-.scale{padding-block:96px 88px;background:var(--cavity-2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
-.scale-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
-#cvScale{display:block;width:100%;aspect-ratio:3/1.05}
-@media (max-width:640px){#cvScale{aspect-ratio:1/2.3}}
-/* energy */
-.energy{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:56px;align-items:start;margin-top:32px}
-@media (max-width:900px){.energy{grid-template-columns:1fr;gap:28px}}
-.ratio .x{font-size:clamp(60px,8.4vw,124px);font-weight:700;letter-spacing:-.05em;line-height:.9;margin:20px 0 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.ratio p{margin:0;font-size:22px;color:var(--silica-muted)}
-.eleg{display:flex;flex-direction:column;gap:12px;margin-top:36px}
-.eleg span{display:flex;gap:12px;align-items:center}
-.eleg i{width:12px;height:12px;display:inline-block;flex:none}
-#cvE{display:block;width:100%;aspect-ratio:1/1}
+.hero-figure{margin:0;min-width:0}
+.hero-fig{--rl:12px;aspect-ratio:720/640;width:100%;max-width:100%;overflow:hidden}
+.hero-fig > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.newton circle{fill:none;stroke:var(--silica);stroke-opacity:.06;stroke-width:.8}
+.axis{stroke:var(--grey);stroke-width:1;stroke-dasharray:2 4}
+.ring{fill:none;stroke:var(--silica);stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s var(--ease) forwards}
+.ring.r2{animation-delay:.15s}.ring.r3{animation-delay:.3s}.ring.r4{animation-delay:.45s}.ring.r5{animation-delay:.6s}
+.leader polyline{fill:none;stroke:var(--s75);stroke-width:1.3;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1s var(--ease) forwards}
+.leader .l1{animation-delay:1.5s}.leader .l2{animation-delay:1.7s}.leader .l3{animation-delay:1.9s}
+.leader rect{fill:var(--cavity);stroke:var(--silica);stroke-width:1.3;opacity:0;animation:fade .4s 1.5s forwards}
+.ann{position:absolute;display:flex;flex-direction:column;gap:3px;transform:translateY(-100%);padding-bottom:8px;max-width:31%;opacity:0;animation:fade .6s forwards}
+.ann b{font:700 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--silica)}
+.ann span{font:12px/1.4 var(--f-mono);letter-spacing:.03em;color:var(--label)}
+.ann.l{left:3.33%}
+.ann.r{right:3.33%;text-align:right;align-items:flex-end}
+.a1{top:25.78%;animation-delay:2s}.a2{top:25%;animation-delay:2.2s}.a3{top:78.13%;animation-delay:2.4s}
+.fig-cap{position:absolute;font:700 10px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--label)}
+.fig-cap.tl-c{left:16px;top:16px}.fig-cap.br-c{right:16px;bottom:16px}
+.ann-legend{display:none;list-style:none;margin:14px 0 0;padding:0;flex-direction:column;gap:10px}
+.ann-legend li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:baseline}
+.ann-legend b{font:700 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--silica)}
+.ann-legend span{font-size:14px;color:var(--muted)}
+@media (max-width:640px){.ann,.leader{display:none}.ann-legend{display:flex}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+
+/* ticker */
+.ticker{border-block:1px solid var(--hair);background:var(--cavity-2);overflow:hidden}
+.ticker-track{display:flex;width:max-content;animation:tick 56s linear infinite}
+.ticker ul{display:flex;margin:0;padding:0;list-style:none}
+.ticker li{display:flex;align-items:center;gap:18px;padding:17px 22px;white-space:nowrap;font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ticker li::before{content:"";width:5px;height:5px;background:var(--laser);flex:none}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* chapters */
+.ch > .wrap{padding-block:clamp(96px,11vw,168px)}
+.ch.alt{background:var(--cavity-2);border-block:1px solid var(--hair)}
+.chead{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:22px clamp(32px,5vw,72px);align-items:end;margin-bottom:clamp(44px,5vw,76px)}
+.chead .kicker{grid-column:1/-1}
+.chead h2{margin:0;font-size:clamp(40px,5.3vw,84px);font-weight:500;line-height:1;letter-spacing:-.035em;text-wrap:balance}
+.chead > p:not(.kicker){margin:0;color:var(--muted);font-size:clamp(17px,1.3vw,19px);max-width:34em}
+@media (max-width:900px){.chead{grid-template-columns:1fr}}
+.kicker{display:flex;align-items:center;gap:12px;margin:0;position:relative}
+.kicker::before{content:"";width:7px;height:7px;flex:none;border:1px solid var(--s40);background:var(--cavity);transition:background-color .5s,border-color .5s}
+.ch.on .kicker::before{background:var(--laser);border-color:var(--laser)}
+.ch.on .kicker{color:var(--silica)}
+.interlude{margin:0 0 clamp(56px,7vw,112px);font-family:var(--f-axiom);font-style:italic;font-weight:300;font-size:clamp(30px,3.6vw,56px);line-height:1.12;max-width:17em;text-wrap:balance}
+.interlude::before{content:"";display:block;width:56px;height:1px;background:var(--laser);margin-bottom:26px}
+@media (min-width:1220px){
+  .ch > .wrap{--rail:64px}
+  .ch > .wrap::before{content:"";position:absolute;top:0;bottom:0;width:1px;left:calc(max(var(--padx), env(safe-area-inset-left,0px)) + 3px);background:repeating-linear-gradient(to bottom,var(--grey) 0 2px,transparent 2px 6px)}
+  .kicker::before{position:absolute;left:-64px;top:50%;margin-top:-4px}
+}
+
+/* scroll-driven reveals (progressive enhancement; content is visible without them) */
+@media (prefers-reduced-motion:no-preference){
+  @supports ((animation-timeline:view()) and (animation-range:entry)){
+    .rv{animation:rv-in linear backwards;animation-timeline:view();animation-range:entry 0% entry 75%}
+    @keyframes rv-in{from{opacity:.12;transform:translateY(44px)}}
+  }
+  @supports (animation-timeline:scroll()){
+    .progress{animation:grow linear both;animation-timeline:scroll(root)}
+    @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  }
+}
+
 /* world need */
 .need{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 @media (max-width:900px){.need{grid-template-columns:1fr}}
-.np{margin:0;border:1px solid var(--line-soft);background:var(--cavity-2);padding:24px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.np{margin:0;padding:28px;display:flex;flex-direction:column;gap:18px;min-width:0}
 .np-wide{grid-column:1/-1}
-.np figcaption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.np-big{font-size:clamp(44px,5vw,72px);font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
-.np-big small{font-size:.36em;font-weight:400;letter-spacing:0;color:var(--silica-muted);margin-left:6px}
-.np-sub{margin:-8px 0 0;color:var(--silica-muted);font-size:15px;line-height:1.45}
 .np-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
-.tag{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--laser);border:1px solid var(--laser);padding:6px 10px}
+.np-big{font-size:clamp(44px,5vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-big small{font-size:.34em;font-weight:400;letter-spacing:0;color:var(--muted);margin-left:8px}
+.np-sub{margin:-6px 0 0;color:var(--muted);font-size:15px;line-height:1.45}
+.tag{font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--laser);border:1px solid var(--laser);padding:7px 10px}
 #cvNeed{display:block;width:100%;aspect-ratio:1000/300}
 @media (max-width:640px){#cvNeed{aspect-ratio:1/.8}}
 .cells{display:grid;gap:3px;margin-top:auto}
 .cells#cellsInf{gap:2px}
-.cells i{display:block;aspect-ratio:1/1;background:var(--line-soft);opacity:0;transition:opacity .35s}
+.cells i{display:block;aspect-ratio:1/1;background:var(--hair);opacity:0;transition:opacity .35s}
 .need.in .cells i{opacity:1}
-.cells i.inf{background:var(--silica)}
-.cells i.gr{background:var(--line)}
-.cells i.mul{background:var(--laser)}
-.np .leg{display:flex;gap:16px;flex-wrap:wrap}
-.np .leg span{display:inline-flex;gap:8px;align-items:center}
-.np .leg i{width:10px;height:10px;display:inline-block;flex:none}
+.cells i.inf{background:var(--silica)}.cells i.gr{background:var(--grey)}.cells i.mul{background:var(--laser)}
+.leg{display:flex;gap:16px;flex-wrap:wrap}
+.leg span{display:inline-flex;gap:8px;align-items:center}
+.leg i{width:10px;height:10px;display:inline-block;flex:none}
 .hbars{display:flex;flex-direction:column;gap:14px;margin-top:auto}
 .hb{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;align-items:center}
 .hbt{position:relative;height:30px}
-.hbf{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--silica);transition:width 1.4s cubic-bezier(.3,0,.2,1)}
-.hbf.dim{background:var(--line)}
+.hbf{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--silica);transition:width 1.4s var(--ease)}
+.hbf.dim{background:var(--grey)}
 .need.in .hbf{width:var(--w)}
-.hbr{position:absolute;top:0;bottom:0;left:var(--l);width:var(--w);border:1px dashed var(--silica-muted);border-left:0;opacity:0;transition:opacity .4s 1.4s}
+.hbr{position:absolute;top:0;bottom:0;left:var(--l);width:var(--w);border:1px dashed var(--muted);border-left:0;opacity:0;transition:opacity .4s 1.4s}
 .need.in .hbr{opacity:1}
-.hbt b{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--f-mono);font-weight:400;font-size:13px;white-space:nowrap;opacity:0;transition:opacity .4s 1.2s}
+.hbt b{position:absolute;top:50%;transform:translateY(-50%);font:400 13px/1 var(--f-mono);white-space:nowrap;opacity:0;transition:opacity .4s 1.2s}
 .need.in .hbt b{opacity:1}
-@media (prefers-reduced-motion:reduce){.cells i,.hbf,.hbr,.hbt b{transition:none}}
-/* mcp + faq */
-.mcp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
-@media (max-width:900px){.mcp{grid-template-columns:1fr}}
-.mcp-card{border:1px solid var(--line);background:var(--cavity);padding:28px;display:flex;flex-direction:column;gap:18px;min-width:0}
-.mcp-url code{display:block;font-family:var(--f-mono);font-size:clamp(18px,2.2vw,26px);color:var(--silica);word-break:break-all;border-bottom:1px solid var(--line);padding-bottom:14px}
-.mcp-url code b{color:var(--laser);font-weight:400}
-.mcp-tools{display:flex;flex-wrap:wrap;gap:8px}
-.mcp-tools span{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line-soft);padding:6px 10px;color:var(--silica-muted)}
-.mcp-steps{display:flex;flex-direction:column}
-.mcp-steps div{padding:16px 0;border-top:1px solid var(--line-soft)}
-.mcp-steps div:first-child{border-top:0;padding-top:0}
-.mcp-steps p{margin:6px 0 0;color:var(--silica-muted);font-size:15px}
-.mcp-steps pre{margin:8px 0 0;font-family:var(--f-mono);font-size:12.5px;color:var(--silica);background:var(--cavity-2);border:1px solid var(--line-soft);padding:12px;white-space:pre-wrap;word-break:break-all}
-.faq{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line-soft)}
-.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 0;font-size:clamp(18px,2vw,22px);font-weight:500}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-family:var(--f-mono);font-weight:400;color:var(--label);font-size:22px;flex:none}
-.faq details[open] summary::after{content:"−";color:var(--laser)}
-.faq details p{margin:0 0 24px;color:var(--silica-muted);max-width:52em}
-/* axiom strip (unused) */
-.strip{border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);background:var(--cavity-2)}
-.strip .wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:48px;align-items:center;padding-block:40px}
-@media (max-width:760px){.strip .wrap{grid-template-columns:1fr;gap:12px}}
-.formula{font-family:var(--f-mono);font-size:clamp(30px,4vw,46px);white-space:nowrap}
-.formula b{color:var(--laser);font-weight:400}
-.strip p{margin:0;font-family:var(--f-axiom);font-style:italic;font-weight:300;font-size:clamp(22px,2.4vw,32px);line-height:1.25}
 
-/* problem */
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-@media (max-width:820px){.stats{grid-template-columns:1fr}}
-.stat{border-top:1px solid var(--line);padding:24px 28px 0 0}
-.stat .n{white-space:nowrap;font-size:clamp(48px,5.6vw,84px);font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
-.stat .d{color:var(--silica-muted);margin-top:14px;max-width:21em}
+/* one pass */
+.versus{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:860px){.versus{grid-template-columns:1fr}}
+.vp{display:flex;flex-direction:column;min-width:0}
+.vp-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;padding:24px 24px 0;flex-wrap:wrap}
+.vp-h h3{margin:0;font-size:20px;font-weight:500;letter-spacing:-.01em}
+.vp.ours .vp-h h3{font-weight:700}
+.vp canvas{display:block;width:100%;aspect-ratio:4/3}
+.vp-f{display:flex;justify-content:space-between;gap:12px;padding:0 24px 22px;font:14px/1.4 var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.vp-f b{font-weight:400;color:var(--silica)}
+.vp.ours .vp-f b{color:var(--laser)}
 
-/* parallel multiply */
-.versus{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
-@media (max-width:820px){.versus{grid-template-columns:1fr}}
-.panel{border:1px solid var(--line-soft);background:var(--cavity);position:relative}
-.panel.ours{border-color:var(--line)}
-.panel header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line-soft)}
-.panel h3{margin:0;font-size:20px;font-weight:500}
-.panel.ours h3{font-weight:700}
-.panel canvas{display:block;width:100%;aspect-ratio:4/3}
-.panel footer{display:flex;justify-content:space-between;gap:12px;padding:14px 20px;border-top:1px solid var(--line-soft);font-family:var(--f-mono);font-size:13px;color:var(--silica-muted);font-variant-numeric:tabular-nums}
-.panel footer b{color:var(--silica);font-weight:400}
-.panel.ours footer b{color:var(--laser)}
-.how{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:56px}
-@media (max-width:900px){.how{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.how{grid-template-columns:1fr}}
-.how div{border-top:1px solid var(--line);padding:18px 24px 0 0;min-width:0}
-.how div.hot{border-top:2px solid var(--laser)}
-.how h4{margin:8px 0 6px;font-size:19px;font-weight:500}
-.how p{margin:0;color:var(--silica-muted);font-size:15px}
+/* the loop */
+.loop{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-areas:"steps fig";gap:clamp(32px,5vw,88px);align-items:start}
+.loop-fig{grid-area:fig;position:sticky;top:calc(env(safe-area-inset-top,0px) + 96px);aspect-ratio:1/1;width:100%;max-width:100%}
+.loop-fig > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.steps{grid-area:steps;display:flex;flex-direction:column;min-width:0}
+.step{min-height:68vh;display:flex;flex-direction:column;justify-content:center;gap:14px;padding-block:40px;border-top:1px solid var(--hair);color:var(--muted);transition:color .45s}
+.step:first-child{border-top:0;padding-top:0}
+.step h3{margin:0;font-size:clamp(40px,4.4vw,68px);font-weight:500;letter-spacing:-.035em;line-height:1;color:var(--label);transition:color .45s}
+.step p{margin:0;max-width:30em;font-size:18px}
+.step .tl{transition:color .45s}
+.step.act{color:var(--silica)}
+.step.act h3{color:var(--silica)}
+.step.act .tl{color:var(--laser)}
+.tele{display:flex;flex-wrap:wrap;gap:8px 28px;margin:6px 0 0;padding:14px 0 0;border-top:1px dashed var(--hair)}
+.tele div{display:flex;flex-direction:column;gap:3px}
+.tele dt{font:700 10px/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--label)}
+.tele dd{margin:0;font:14px/1.3 var(--f-mono);letter-spacing:.04em;color:var(--silica)}
+.seg{stroke-width:2;fill:none;transition:stroke-width .3s,stroke-opacity .3s,stroke .3s}
+.seg-o{stroke:var(--laser);stroke-opacity:.3}
+.seg-e{stroke:var(--s40);stroke-dasharray:6 6}
+.seg.act{stroke-width:3.5}
+.seg-o.act{stroke-opacity:1}
+.seg-e.act{stroke:var(--silica)}
+.chev{fill:none;stroke:var(--s40);stroke-width:2}
+.lp-txt{font-family:var(--f-mono);font-weight:700;font-size:16px;letter-spacing:.1em;fill:var(--label)}
+.ro-big{font-family:var(--f-mono);font-size:34px;letter-spacing:.04em;fill:var(--silica)}
+.ro-sm{font-family:var(--f-mono);font-size:17px;letter-spacing:.08em;fill:var(--label)}
+#loopPulse{fill:var(--laser)}
+.lnode{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);background:var(--cavity);border:1px solid var(--grey);padding:12px 14px;display:flex;align-items:center;gap:10px;transition:border-color .35s}
+.lnode svg{width:24px;height:24px;flex:none;fill:none;stroke:var(--label);stroke-width:1.5;stroke-linecap:square;transition:stroke .35s}
+.lnode b{display:block;font:700 10px/1.25 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--label);white-space:nowrap;transition:color .35s}
+.lnode span{display:block;font-size:15px;font-weight:500;color:var(--muted);transition:color .35s}
+.lnode.act{border-color:var(--silica)}
+.lnode.act svg{stroke:var(--silica)}
+.lnode.act b{color:var(--laser)}
+.lnode.act span{color:var(--silica)}
+@media (max-width:900px){
+  .loop{grid-template-columns:1fr;grid-template-areas:"fig" "steps"}
+  .loop-fig{top:calc(env(safe-area-inset-top,0px) + 64px);z-index:2;width:min(100%,44vh);justify-self:center}
+  .step{min-height:52vh}
+  .step:first-child{padding-top:40px}
+}
+@media (max-width:560px){.lnode{padding:7px 9px;gap:7px}.lnode svg{width:16px;height:16px}.lnode b{font-size:8.5px}.lnode span{font-size:12px}}
 
-/* product */
-.product{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:56px;align-items:center}
-@media (max-width:960px){.product{grid-template-columns:1fr}}
-.chip-art{border:1px solid var(--line-soft);background:var(--cavity);padding:20px}
+/* scale band */
+.scale-panel{padding:28px 24px 8px}
+#cvScale{display:block;width:100%;aspect-ratio:3/1.05}
+@media (max-width:640px){#cvScale{aspect-ratio:1/2.3}}
+
+/* processor */
+.product{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:center}
+@media (max-width:980px){.product{grid-template-columns:1fr}}
+.chip-art{padding:20px}
 .chip-art svg{display:block;width:100%;height:auto}
-.specs{display:flex;flex-direction:column}
-.spec{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line-soft)}
+.chip-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
+.big-name{margin:10px 0 6px;font-size:clamp(48px,6vw,96px);font-weight:700;letter-spacing:-.045em;line-height:.95}
+.product-sub{margin:0 0 26px;color:var(--muted);font-size:18px}
+.specs{display:flex;flex-direction:column;margin:0}
+.spec{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--hair)}
+.spec dt{margin:0}.spec dd{margin:0}
 @media (max-width:520px){.spec{grid-template-columns:1fr;gap:4px}}
-.spec dt{margin:0}
-.spec dd{margin:0}
-.big-name{font-size:clamp(32px,4vw,48px);font-weight:700;letter-spacing:-.03em;margin:8px 0 6px}
 
-/* energy chart */
-.bars{display:flex;flex-direction:column;gap:20px;margin-top:8px}
-.bar-row{display:grid;grid-template-columns:250px minmax(0,1fr) 110px;gap:18px;align-items:center}
-@media (max-width:560px){.bar-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"lab val" "trk trk";gap:6px 10px}.bar-row .lab{grid-area:lab}.bar-row .val{grid-area:val}.bar-row .track{grid-area:trk}}
-.bar-row .lab{font-size:15px;color:var(--silica-muted);line-height:1.3;display:flex;align-items:center;gap:10px}
-.chip{flex:none;width:30px;height:30px;display:inline-grid;place-items:center;font-family:var(--f-mono);font-size:12px;font-weight:700;color:var(--silica);border:1px solid var(--line);position:relative;background:var(--cavity)}
-.chip::before{content:"";position:absolute;inset:-5px 6px;border-top:2px dotted var(--line);border-bottom:2px dotted var(--line)}
-.chip.oi{color:var(--laser);border-color:var(--laser)}
-.chip.oi::before{border-color:var(--laser)}
-.bar-row .val{font-family:var(--f-mono);font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
-.track{height:16px;position:relative;border-bottom:1px solid var(--line-soft)}
-.fill{position:absolute;left:0;top:4px;height:8px;border-top:2px dashed var(--line);width:0;transition:width 1.2s cubic-bezier(.3,0,.2,1)}
-.fill.oi{border-top:4px solid var(--laser);top:5px}
-.axis{display:grid;grid-template-columns:250px minmax(0,1fr) 110px;gap:18px}
-@media (max-width:560px){.axis{grid-template-columns:1fr}.axis>span{display:none}}
-.ticks{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;color:var(--label)}
-
-/* facility */
-.stage-tabs{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--line);width:max-content;max-width:100%}
-.stage-tabs button{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:none;color:var(--silica-muted);border:0;border-right:1px solid var(--line);padding:12px 16px;cursor:pointer}
+/* energy */
+.stage-tabs{display:flex;flex-wrap:wrap;border:1px solid var(--grey);width:max-content;max-width:100%}
+.stage-tabs button{position:relative;font:700 12px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;background:none;color:var(--muted);border:0;border-right:1px solid var(--grey);padding:13px 17px;cursor:pointer}
 .stage-tabs button:last-child{border-right:0}
-.stage-tabs button{position:relative}
+.stage-tabs button[aria-selected="true"]{background:var(--silica);color:var(--cavity)}
 .stage-tabs.auto button[aria-selected="true"]::after{content:"";position:absolute;left:0;bottom:0;height:3px;background:var(--laser);animation:tabprog 3.6s linear forwards}
 @keyframes tabprog{from{width:0}to{width:100%}}
-.stage-tabs button[aria-selected="true"]{background:var(--silica);color:var(--cavity)}
-.fac{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:48px;margin-top:32px;align-items:start}
+.energy{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(32px,5vw,64px);align-items:start;margin-top:32px}
+@media (max-width:900px){.energy{grid-template-columns:1fr;gap:28px}}
+.ratio .x{font-size:clamp(60px,8.4vw,128px);font-weight:700;letter-spacing:-.05em;line-height:.9;margin:20px 0 12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ratio p{margin:0;font-size:22px;color:var(--muted);max-width:18em}
+.eleg{display:flex;flex-direction:column;gap:12px;margin-top:36px}
+.eleg > span{display:flex;gap:12px;align-items:center}
+.eleg i{width:12px;height:12px;display:inline-block;flex:none}
+.egrid{padding:16px}
+#cvE{display:block;width:100%;aspect-ratio:1/1}
+
+/* facility */
+.fac{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(32px,4vw,56px);margin-top:32px;align-items:start}
 @media (max-width:960px){.fac{grid-template-columns:1fr}}
-.floor{border:1px solid var(--line-soft);background:var(--cavity);padding:20px;position:relative}
+.floor{padding:20px}
 .floor-grid{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:3px}
-.slot{aspect-ratio:1/1.6;background:var(--line-soft);transition:background .25s,box-shadow .25s}
+.slot{aspect-ratio:1/1.6;background:var(--hair);transition:background .25s,box-shadow .25s}
 .slot.on{background:var(--silica)}
-.slot.pilot{background:var(--silica-muted)}
 .slot.fresh{background:transparent;box-shadow:inset 0 0 0 1.5px var(--laser)}
 .floor-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px}
 .legend{display:flex;gap:16px;flex-wrap:wrap}
 .legend span{display:inline-flex;gap:8px;align-items:center}
 .legend i{width:10px;height:14px;display:inline-block}
-.facts{display:flex;flex-direction:column}
-.fact{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-top:1px solid var(--line-soft)}
-.fact .v{font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums;text-align:right}
-.fact.key .v{font-size:28px;color:var(--silica)}
+.lg-new{box-shadow:inset 0 0 0 1.5px var(--laser)}.lg-on{background:var(--silica)}
 .stage-desc{font-size:22px;line-height:1.35;margin:0 0 8px;font-weight:500}
+.facts{display:flex;flex-direction:column}
+.fact{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-top:1px solid var(--hair)}
+.fact .v{font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums;text-align:right}
+.fact.key .v{font-size:28px}
 
-/* access */
-.access{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
-@media (max-width:900px){.access{grid-template-columns:1fr}}
-.console{border:1px solid var(--line);background:var(--cavity);font-family:var(--f-mono);font-size:15px;line-height:1.7;padding:26px;min-height:200px}
-.console .dim{color:var(--label)}
+/* mcp */
+.mcp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.mcp{grid-template-columns:1fr}}
+.mcp-card{padding:30px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.mcp-url code{display:block;font-family:var(--f-mono);font-size:clamp(18px,2.2vw,28px);color:var(--silica);word-break:break-all;border-bottom:1px solid var(--grey);padding-bottom:16px}
+.mcp-url code b{color:var(--laser);font-weight:400}
+.mcp-tools{display:flex;flex-wrap:wrap;gap:8px}
+.mcp-tools span{font-family:var(--f-mono);font-size:12px;border:1px solid var(--hair);padding:6px 10px;color:var(--muted)}
+.mcp-steps > div{padding:16px 0;border-top:1px solid var(--hair)}
+.mcp-steps > div:first-child{border-top:0;padding-top:0}
+.mcp-steps p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.mcp-steps pre{margin:8px 0 0;font-family:var(--f-mono);font-size:12.5px;color:var(--silica);background:var(--cavity-3);border:1px solid var(--hair);padding:12px;white-space:pre-wrap;word-break:break-all}
+
+/* faq */
+.faq{display:flex;flex-direction:column;border-top:1px solid var(--grey)}
+.faq details{border-bottom:1px solid var(--hair)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;font-size:clamp(18px,2vw,23px);font-weight:500;letter-spacing:-.01em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-mono);font-weight:400;color:var(--label);font-size:22px;flex:none;transition:transform .3s var(--ease)}
+.faq details[open] summary::after{content:"\2212";color:var(--laser)}
+.faq summary:hover{color:#ffffff}
+.faq details p{margin:0 0 26px;color:var(--muted);max-width:52em}
+
+/* access + follow */
+.access{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(48px,6vw,104px);align-items:start}
+@media (max-width:980px){.access{grid-template-columns:1fr}}
+.access h2,.access h3.h2{margin:14px 0 18px;font-size:clamp(38px,4.4vw,68px);font-weight:500;line-height:1;letter-spacing:-.035em;text-wrap:balance}
+.access .lede{margin:0 0 28px;color:var(--muted);font-size:18px;max-width:30em}
+.console{padding:26px;font-family:var(--f-mono);font-size:15px;line-height:1.7;min-height:210px}
+.console .dim{color:var(--label);font-size:12px;letter-spacing:.06em}
+.console form{margin-top:16px}
 .console label{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.console input{flex:1;min-width:150px;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--silica);font:inherit;padding:4px 0;border-radius:0}
+.console input{flex:1;min-width:150px;background:transparent;border:0;border-bottom:1px solid var(--grey);color:var(--silica);font:inherit;padding:4px 0;border-radius:0}
 .console input:focus{outline:none;border-bottom-color:var(--laser)}
-.console .out{white-space:pre-wrap;margin-top:12px;color:var(--silica-muted)}
+.console .out{white-space:pre-wrap;margin-top:14px;color:var(--muted)}
 .cursor{display:inline-block;width:9px;height:17px;background:var(--laser);vertical-align:-3px;animation:blink 1.1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-@media (prefers-reduced-motion:reduce){.cursor{animation:none}}
+.ports{display:flex;flex-direction:column;border-top:1px solid var(--grey)}
+.port{position:relative;display:grid;grid-template-columns:22px minmax(0,1fr) auto;column-gap:20px;row-gap:4px;align-items:center;padding:22px 4px 22px 0;border-bottom:1px solid var(--hair);text-decoration:none}
+.port .jack{grid-row:1/3;width:18px;height:18px;border:1px solid var(--grey);display:grid;place-items:center;transition:border-color .3s}
+.port .jack::after{content:"";width:4px;height:4px;background:var(--grey);transition:background-color .3s}
+.port .pn{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0}
+.port .pname{font-size:clamp(22px,2.2vw,30px);font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.port .ph{font:13px/1.2 var(--f-mono);letter-spacing:.03em;color:var(--label)}
+.port .pd{grid-column:2;color:var(--muted);font-size:15px}
+.port .arr{grid-row:1/3;grid-column:3;font:20px/1 var(--f-mono);color:var(--label);transition:transform .35s var(--ease),color .3s}
+.port::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--laser);transform:scaleX(0);transform-origin:0 50%;transition:transform .55s var(--ease)}
+.port:hover .jack,.port:focus-visible .jack{border-color:var(--silica)}
+.port:hover .jack::after,.port:focus-visible .jack::after{background:var(--laser)}
+.port:hover .arr,.port:focus-visible .arr{transform:translate(4px,-4px);color:var(--silica)}
+.port:hover::after,.port:focus-visible::after{transform:scaleX(1)}
 
-footer.site{border-top:1px solid var(--line-soft)}
-footer.site .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-block:32px 44px}
+/* footer */
+footer.site{background:var(--cavity);border-top:1px solid var(--hair)}
+footer.site .wrap{--rail:0px}
+.f-grid{display:grid;grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr));gap:40px 32px;padding-block:80px 48px}
+@media (max-width:900px){.f-grid{grid-template-columns:1fr 1fr}.f-about{grid-column:1/-1}}
+.f-about{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.f-about .axiom{margin:0;font-family:var(--f-axiom);font-style:italic;font-weight:300;font-size:28px;line-height:1.2}
+.email{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.email a{font:16px/1.2 var(--f-mono);letter-spacing:.03em;text-decoration:none;border-bottom:1px solid var(--grey);padding-bottom:3px}
+.copy{font:700 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--grey);padding:8px 10px;cursor:pointer}
+.copy:hover{color:var(--silica);border-color:var(--silica)}
+.f-col h3{margin:0 0 16px}
+.f-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.f-col a{text-decoration:none;color:var(--muted);font-size:15px}
+.f-col a:hover{color:var(--silica)}
+.f-mark{margin:0;font-size:min(18.5vw,300px);line-height:.82;letter-spacing:-.05em;overflow:hidden;padding-block:8px 28px;color:var(--silica)}
+.f-base{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:22px 40px;border-top:1px solid var(--hair)}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-copy > *{animation:none}
+  .ring,.leader polyline{animation:none;stroke-dashoffset:0}
+  .leader rect,.ann{animation:none;opacity:1}
+  .ticker-track{animation:none}
+  .cursor{animation:none}
+  .ret,.btn::before{transition:none}
+}
 </style>
 </head>
 <body>
@@ -272,217 +431,356 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="OI:LOOP home">
+    <a class="brand" href="#top" aria-label="OI:LOOP, back to top">
       <svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="92" fill="none" stroke="#e6e9f0" stroke-opacity=".2" stroke-width="3"/><circle cx="120" cy="120" r="78" fill="none" stroke="#e6e9f0" stroke-opacity=".4" stroke-width="6"/><circle cx="120" cy="120" r="60" fill="none" stroke="#e6e9f0" stroke-opacity=".75" stroke-width="9"/><circle cx="120" cy="120" r="38" fill="none" stroke="#e6e9f0" stroke-width="12"/><circle cx="120" cy="120" r="16" fill="none" stroke="#e6e9f0" stroke-width="14"/><rect x="112" y="10" width="16" height="220" fill="#060709" transform="rotate(45 120 120)"/><rect x="114" y="114" width="12" height="12" fill="#ff1e00"/></svg>
       <span class="wm">OI<i>:</i><span>LOOP</span></span>
     </a>
-    <nav aria-label="Site">
-      <a href="#technology">Technology</a>
+    <nav class="main" aria-label="Chapters">
+      <a class="sr-only" href="#top" tabindex="-1">Overview</a>
+      <a href="#loop">The loop</a>
       <a href="#product">Processor</a>
       <a href="#facility">Facility</a>
       <a href="#mcp">Add MCP</a>
-      <a href="#access" class="cta">Join waitlist</a>
     </nav>
-  </div>
-</header>
-
-<main id="top">
-  <div class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <h1><span class="wm">OI<i>:</i><span>LOOP</span></span></h1>
-        <p class="axiom">Weights in Light. Compute in Motion.</p>
-        <p class="lead">We print the weights of large language models into passive optical processors and serve them from our own inference facility. Every multiplication happens at once, while light passes through.</p>
-        <div class="ctas">
-          <a class="btn" href="#access"><span class="dot" aria-hidden="true"></span>Join the early waitlist</a>
-          <a class="btn ghost" href="#technology">See it compute</a>
-          <a class="btn ghost" href="#mcp">Add MCP</a>
-        </div>
-      </div>
-      <div class="emblem-stage">
-        <svg viewBox="0 0 240 240" role="img" aria-label="The OI:LOOP Phase Monolith emblem: concentric weight rings, a 45 degree signal slit and a laser-red readout mark at the centre.">
-          <circle class="ring r1" cx="120" cy="120" r="92" stroke-width="1" stroke-opacity=".2"/>
-          <circle class="ring r2" cx="120" cy="120" r="78" stroke-width="2.5" stroke-opacity=".4"/>
-          <circle class="ring r3" cx="120" cy="120" r="60" stroke-width="4.5" stroke-opacity=".75"/>
-          <circle class="ring r4" cx="120" cy="120" r="38" stroke-width="7"/>
-          <circle class="ring r5" cx="120" cy="120" r="16" stroke-width="10"/>
-          <rect x="114" y="10" width="12" height="220" fill="#060709" transform="rotate(45 120 120)"/>
-          <rect class="pulse" x="-2" y="-2" width="4" height="4"/>
-          <rect class="core" x="118" y="118" width="4" height="4"/>
-        </svg>
-        <div class="stage-cap"><span class="mono">PMP-1550 · REV.5</span><span class="mono">λ 1550 nm</span></div>
-      </div>
+    <div class="top-actions">
+      <a class="btn sm primary" href="#access"><span class="dot" aria-hidden="true"></span>Join waitlist</a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
     </div>
   </div>
+  <div class="progress" aria-hidden="true"></div>
+</header>
 
-  <section class="scale" aria-labelledby="h-scale">
+<div id="menu" hidden>
+  <nav aria-label="Menu">
+    <a href="#wall">The energy wall</a>
+    <a href="#technology">One pass of light</a>
+    <a href="#loop">The loop</a>
+    <a href="#product">Processor</a>
+    <a href="#facility">Facility</a>
+    <a href="#mcp">Add MCP</a>
+    <a href="#access">Join the waitlist</a>
+  </nav>
+  <div class="menu-social">
+    <a href="https://www.linkedin.com/company/oiloop/" target="_blank" rel="me noopener">LinkedIn ↗</a>
+    <a href="https://x.com/OpIntLoop" target="_blank" rel="me noopener">X ↗</a>
+    <a href="https://www.instagram.com/o.i.l.o.o.p/" target="_blank" rel="me noopener">Instagram ↗</a>
+    <a href="https://github.com/OpIntLoop" target="_blank" rel="me noopener">GitHub ↗</a>
+  </div>
+</div>
+
+<main id="top">
+  <section class="hero" aria-labelledby="h-hero">
     <div class="wrap">
-      <div class="scale-head">
-        <h2 id="h-scale">Bigger matrix.<br>Same single pass.</h2>
-        <span class="mono">8×8 → 128×128 · one pass of light</span>
+      <div class="hero-copy">
+        <p class="tl" style="margin:0">SYS.ID // PMP-1550 // REV.5</p>
+        <h1 id="h-hero"><span class="wm">OI<i>:</i><span>LOOP</span></span><span class="sr-only">, Optical Integration Loop</span></h1>
+        <p class="axiom">Weights in Light.<br>Compute in Motion.</p>
+        <p class="lead">We print the weights of AI models into glass. Light crosses the glass once, and every multiplication in the layer happens in that pass. The panels run in our own inference facility, and we sell the tokens.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#access"><span class="dot" aria-hidden="true"></span>Join the early waitlist</a>
+          <a class="btn" href="#loop">Follow the loop <span class="arr" aria-hidden="true">→</span></a>
+          <a class="btn" href="#mcp">Add MCP</a>
+        </div>
+        <ul class="hero-specs">
+          <li><b>λ 1550 nm</b><span>Fibre-network wavelength</span></li>
+          <li><b>0 W</b><span>In the weight bank</span></li>
+          <li><b>3.3–6.3 fJ</b><span>Per multiply, design model</span></li>
+        </ul>
       </div>
-      <canvas id="cvScale" aria-label="Animation: light crosses an 8 by 8, a 32 by 32 and a 128 by 128 weight matrix in the same single pass."></canvas>
+      <figure class="hero-figure">
+        <div class="hero-fig ret">
+          <svg id="heroSvg" viewBox="0 0 720 640" role="img" aria-label="The OI:LOOP emblem, the Phase Monolith, drawn as a technical figure: four encoded weight planes inside a guard ring, a 45 degree signal slit, and a laser-red readout mark at the centre, over a faint Newton-ring texture.">
+            <g class="newton" id="newton"></g>
+            <line class="axis" x1="0" y1="320" x2="720" y2="320"/>
+            <line class="axis" x1="360" y1="0" x2="360" y2="640"/>
+            <g transform="translate(360 320) scale(2) translate(-120 -120)">
+              <circle class="ring r1" cx="120" cy="120" r="92" stroke-width="1" stroke-opacity=".2" pathLength="1"/>
+              <circle class="ring r2" cx="120" cy="120" r="78" stroke-width="2.5" stroke-opacity=".4" pathLength="1"/>
+              <circle class="ring r3" cx="120" cy="120" r="60" stroke-width="4.5" stroke-opacity=".75" pathLength="1"/>
+              <circle class="ring r4" cx="120" cy="120" r="38" stroke-width="7" pathLength="1"/>
+              <circle class="ring r5" cx="120" cy="120" r="16" stroke-width="10" pathLength="1"/>
+              <rect x="114" y="10" width="12" height="220" fill="#060709" transform="rotate(45 120 120)"/>
+              <rect x="-2" y="-2" width="4" height="4" fill="#ff1e00" opacity="0">
+                <animateMotion path="M205 35 L120 120" dur="2.6s" begin="2s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.5;1" calcMode="linear"/>
+                <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.06;.48;.52;1" dur="2.6s" begin="2s" repeatCount="indefinite"/>
+              </rect>
+              <rect x="118" y="118" width="4" height="4" fill="#ff1e00">
+                <animate attributeName="opacity" values="1;1;.3;1;1" keyTimes="0;.5;.53;.68;1" dur="2.6s" begin="2s" repeatCount="indefinite"/>
+              </rect>
+            </g>
+            <g class="leader">
+              <polyline class="l1" points="275,235 205,165 24,165" pathLength="1"/>
+              <rect x="272" y="232" width="6" height="6"/>
+              <polyline class="l2" points="460,220 520,160 696,160" pathLength="1"/>
+              <rect x="457" y="217" width="6" height="6"/>
+              <polyline class="l3" points="360,320 540,500 696,500" pathLength="1"/>
+            </g>
+          </svg>
+          <div class="ann l a1"><b>Encoded weight planes</b><span>r = 16 · 38 · 60 · 78</span></div>
+          <div class="ann r a2"><b>Signal slit · 45°</b><span>The Optical Integration Loop</span></div>
+          <div class="ann r a3"><b>Readout · x = 0, y = 0</b><span>Σ W·x at the detector</span></div>
+          <span class="fig-cap tl-c">Phase Monolith</span>
+          <span class="fig-cap br-c">240 × 240 grid</span>
+        </div>
+        <ul class="ann-legend">
+          <li><b>Rings</b><span>Encoded weight planes, heavier toward the centre</span></li>
+          <li><b>45° slit</b><span>The Optical Integration Loop between light and electronics</span></li>
+          <li><b>Red mark</b><span>Readout: Σ W·x at the detector</span></li>
+        </ul>
+      </figure>
     </div>
   </section>
 
-  <section class="band" aria-labelledby="h-problem">
+  <div class="ticker" role="region" aria-label="Key figures">
+    <div class="ticker-track">
+      <ul>
+        <li>λ 1550 nm carrier</li><li>τ = n·L / c</li><li>0 W in the weight bank</li><li>3.3–6.3 fJ per multiply · design model</li>
+        <li>Zero-Gate Passive Matrix Processor</li><li>Optical Inference Facility</li><li>Tokens via API</li><li>First model · 0.5B parameters · 24 layers</li>
+      </ul>
+      <ul aria-hidden="true">
+        <li>λ 1550 nm carrier</li><li>τ = n·L / c</li><li>0 W in the weight bank</li><li>3.3–6.3 fJ per multiply · design model</li>
+        <li>Zero-Gate Passive Matrix Processor</li><li>Optical Inference Facility</li><li>Tokens via API</li><li>First model · 0.5B parameters · 24 layers</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="ch" id="wall" aria-labelledby="h-wall">
     <div class="wrap">
-      <div class="intro">
-        <h2 id="h-problem">AI demand is outrunning the grid.</h2>
-        <p>Every answer an AI writes is inference. Demand is growing faster than the power to serve it, and most of that power moves weights instead of computing.</p>
+      <div class="chead rv">
+        <p class="kicker tl">The energy wall</p>
+        <h2 id="h-wall">AI spends its energy moving weights, not multiplying them.</h2>
+        <p>Every token a language model writes re-reads all of its weights. The arithmetic is cheap. Moving the weights is not, and demand is growing faster than the power to serve it.</p>
       </div>
-      <div class="need" id="need">
-        <figure class="np np-wide">
+      <div class="need rv" id="need">
+        <figure class="np np-wide ret">
           <div class="np-head">
             <div>
-              <span class="mono">Data-centre electricity · world</span>
+              <span class="tl">Data-centre electricity · world</span>
               <div class="np-big" style="margin-top:12px"><span id="needCnt">415</span><small>TWh / year</small></div>
             </div>
             <span class="tag" id="needTag">2024</span>
           </div>
-          <canvas id="cvNeed" aria-label="Line chart: world data-centre electricity use rises from 415 terawatt-hours in 2024 to a projected 945 in 2030, about 2.3 times."></canvas>
+          <canvas id="cvNeed" role="img" aria-label="Line chart: world data-centre electricity use rises from 415 terawatt-hours in 2024 to a projected 945 in 2030, about 2.3 times."></canvas>
         </figure>
-        <figure class="np">
-          <span class="mono">Data-centre capacity demand</span>
+        <figure class="np ret">
+          <span class="tl">Data-centre capacity demand</span>
           <div class="np-big">~3×<small>by 2030</small></div>
           <p class="np-sub">From about 60 GW to 171–219 GW, most of it for AI.</p>
           <div class="hbars" aria-hidden="true">
-            <div class="hb"><span class="mono">2023</span><div class="hbt"><div class="hbf dim" style="--w:27%"></div><b style="left:calc(27% + 10px)">60 GW</b></div></div>
-            <div class="hb"><span class="mono">2030</span><div class="hbt"><div class="hbf" style="--w:78%"></div><div class="hbr" style="--l:78%;--w:21.5%"></div></div></div>
+            <div class="hb"><span class="tl">2023</span><div class="hbt"><div class="hbf dim" style="--w:27%"></div><b style="left:calc(27% + 10px)">60 GW</b></div></div>
+            <div class="hb"><span class="tl">2030</span><div class="hbt"><div class="hbf" style="--w:78%"></div><div class="hbr" style="--l:78%;--w:21.5%"></div></div></div>
           </div>
-          <div class="leg mono"><span><i style="background:var(--silica)"></i>171 GW</span><span><i style="border:1px dashed var(--silica-muted)"></i>up to 219 GW</span></div>
+          <div class="leg tl"><span><i style="background:var(--silica)"></i>171 GW</span><span><i style="border:1px dashed var(--muted)"></i>up to 219 GW</span></div>
         </figure>
-        <figure class="np">
-          <span class="mono">Cloud AI spend, 2026</span>
+        <figure class="np ret">
+          <span class="tl">Cloud AI spend, 2026</span>
           <div class="np-big">55%<small>inference</small></div>
           <p class="np-sub">Inference passes training for the first time: $23.3B against $19B, rising to 59% in 2027.</p>
           <div class="cells" id="cellsInf" style="grid-template-columns:repeat(20,minmax(0,1fr))" aria-hidden="true"></div>
-          <div class="leg mono"><span><i style="background:var(--silica)"></i>Inference</span><span><i style="background:var(--line)"></i>Training</span></div>
+          <div class="leg tl"><span><i style="background:var(--silica)"></i>Inference</span><span><i style="background:var(--grey)"></i>Training</span></div>
         </figure>
-        <figure class="np">
-          <span class="mono">Where a token’s energy goes</span>
+        <figure class="np ret">
+          <span class="tl">Where a token’s energy goes</span>
           <div class="np-big">60–70×</div>
           <p class="np-sub">More energy reading weights from memory than multiplying them.</p>
           <div class="cells" id="cellsTok" style="grid-template-columns:repeat(13,minmax(0,1fr))" aria-hidden="true"></div>
-          <div class="leg mono"><span><i style="background:var(--laser)"></i>Multiply</span><span><i style="background:var(--line)"></i>Move weights</span></div>
+          <div class="leg tl"><span><i style="background:var(--laser)"></i>Multiply</span><span><i style="background:var(--grey)"></i>Move weights</span></div>
         </figure>
       </div>
       <p class="note">IEA, Energy and AI (2025), base case · McKinsey, AI power: expanding data center capacity (2024), midpoint scenario · Gartner, AI-optimized IaaS forecast, August 2026 · OI:LOOP internal calculation for a 7B-class model, HBM ~4 pJ/bit. 2025–2029 drawn as a straight projection between the IEA points.</p>
     </div>
   </section>
 
-  <section class="band alt" id="technology" aria-labelledby="h-tech">
+  <section class="ch alt" id="technology" aria-labelledby="h-tech">
     <div class="wrap">
-      <div class="intro">
-        <h2 id="h-tech">One pass of light. Every multiplication at once.</h2>
-        <p>A GPU fetches weights and multiplies them step by step. In the OI:LOOP weight bank, the weights are already there, printed into the glass. The input arrives as light and all products form in parallel as it crosses.</p>
+      <p class="interlude rv">So we stopped moving the weights.</p>
+      <div class="chead rv">
+        <p class="kicker tl">Physical Weight Encoding</p>
+        <h2 id="h-tech">Put the weights where the light is.</h2>
+        <p>A memory-bound chip fetches each weight, multiplies, then fetches the next. We print the weights into glass instead. The input arrives as light, and all the products form as it crosses.</p>
       </div>
-      <div class="versus">
-        <div class="panel">
-          <header><h3>Memory-bound chip</h3><span class="mono">fetch · multiply · repeat</span></header>
-          <canvas id="cvSeq" aria-label="Animation: a 16 by 16 grid of multiplications filled one cell at a time, each after a weight fetch from memory."></canvas>
-          <footer><span>multiplies done</span><b id="seqCount">0 / 256</b></footer>
+      <div class="versus rv">
+        <div class="vp ret">
+          <div class="vp-h"><h3>Memory-bound chip</h3><span class="tl">Fetch · multiply · repeat</span></div>
+          <canvas id="cvSeq" role="img" aria-label="Animation: a 16 by 16 grid of multiplications filled one cell at a time, each after a weight fetch from memory."></canvas>
+          <div class="vp-f"><span>multiplies done</span><b id="seqCount">0 / 256</b></div>
         </div>
-        <div class="panel ours">
-          <header><h3>OI:LOOP passive bank</h3><span class="mono">one pass · 0 W in the bank</span></header>
-          <canvas id="cvPar" aria-label="Animation: light enters sixteen rows at once and every one of the 256 printed weights multiplies in the same pass."></canvas>
-          <footer><span>multiplies done</span><b id="parCount">0 / 256</b></footer>
+        <div class="vp ours ret">
+          <div class="vp-h"><h3>OI:LOOP passive weight bank</h3><span class="tl">One pass · 0 W in the bank</span></div>
+          <canvas id="cvPar" role="img" aria-label="Animation: light enters sixteen rows at once and every one of the 256 printed weights multiplies in the same pass."></canvas>
+          <div class="vp-f"><span>multiplies done</span><b id="parCount">0 / 256</b></div>
         </div>
       </div>
       <p class="note">Illustration of the principle with a 16×16 matrix. Timing is not to scale.</p>
-      <div class="how">
-        <div><span class="mono">Light in</span><h4>Modulate</h4><p>The input vector is written onto 1550 nm light, the wavelength of fibre networks.</p></div>
-        <div class="hot"><span class="mono" style="color:var(--laser)">Weights</span><h4>Pass the bank</h4><p>Each printed path transmits a fixed share of light. No heaters, no clock.</p></div>
-        <div><span class="mono">Sum</span><h4>Detect</h4><p>Paths converge on detectors. The current is the sum of the products.</p></div>
-        <div><span class="mono">Loop</span><h4>Continue</h4><p>Electronics apply the activation and attention, then send the next layer back into light.</p></div>
+    </div>
+  </section>
+
+  <section class="ch" id="loop" aria-labelledby="h-loop">
+    <div class="wrap">
+      <div class="chead rv">
+        <p class="kicker tl">Optical Integration Loop</p>
+        <h2 id="h-loop">Follow one token around the loop.</h2>
+        <p>One lap is one layer. Light does the multiplying, electronics do the rest, and the result goes back into light for the next layer.</p>
+      </div>
+      <div class="loop">
+        <div class="loop-fig ret" id="loopFig">
+          <svg viewBox="0 0 600 600" role="img" aria-label="Diagram of the Optical Integration Loop: laser source, passive weight bank, photodetector and electronics joined in a loop. The light path runs from the laser through the weight bank to the detector; the electrical path runs back through the electronics to the laser.">
+            <path id="loopPath" d="M150 110 H450 V490 H150 Z" fill="none" stroke="none"/>
+            <line class="seg seg-o" x1="150" y1="110" x2="450" y2="110"/>
+            <line class="seg seg-o" x1="450" y1="110" x2="450" y2="490"/>
+            <line class="seg seg-e" x1="450" y1="490" x2="150" y2="490"/>
+            <line class="seg seg-e" x1="150" y1="490" x2="150" y2="110"/>
+            <path class="chev" d="M352 102 L362 110 L352 118"/>
+            <path class="chev" d="M442 352 L450 362 L458 352"/>
+            <path class="chev" d="M248 482 L238 490 L248 498"/>
+            <path class="chev" d="M142 248 L150 238 L158 248"/>
+            <text class="lp-txt" x="300" y="96" text-anchor="middle">LIGHT</text>
+            <text class="lp-txt" x="0" y="0" text-anchor="middle" transform="translate(478 300) rotate(90)">LIGHT</text>
+            <text class="lp-txt" x="300" y="526" text-anchor="middle">CURRENT</text>
+            <text class="lp-txt" x="0" y="0" text-anchor="middle" transform="translate(122 300) rotate(-90)">DIGITAL</text>
+            <text class="ro-big" id="loopLayer" x="300" y="292" text-anchor="middle">LAYER 01 / 24</text>
+            <text class="ro-sm" id="loopToken" x="300" y="330" text-anchor="middle">TOKEN 0001</text>
+            <text class="ro-sm" x="300" y="362" text-anchor="middle">896 CHANNELS</text>
+            <rect id="loopPulse" x="-7" y="-7" width="14" height="14" transform="translate(150 110)"/>
+          </svg>
+          <div class="lnode" style="--x:25%;--y:18.33%"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8h9"/><path d="M11 8l4-4"/><path d="M11 8l4 4"/><rect x="1" y="5.5" width="4" height="5"/></svg><div><b>Laser source</b><span>Encode</span></div></div>
+          <div class="lnode" style="--x:75%;--y:18.33%"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12"/><path d="M8 2v12"/><path d="M12 2v12"/><path d="M4 5h1.5M4 9h1.5M8 4h1.5M8 11h1.5M12 6h1.5M12 10h1.5"/></svg><div><b>Weight bank</b><span>Multiply</span></div></div>
+          <div class="lnode" style="--x:75%;--y:81.67%"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3v10"/><path d="M9 8l5-4v8z"/><path d="M1 5l2 1-2 1 2 1"/><path d="M4 9l2 1-2 1 2 1"/><path d="M6 6h2M7 10.5h1"/></svg><div><b>Photodetector</b><span>Sum</span></div></div>
+          <div class="lnode" style="--x:25%;--y:81.67%"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h9v8H5"/><path d="M5 12L2 9"/><path d="M2 4v2"/></svg><div><b>Electronics</b><span>Return</span></div></div>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span class="tl">Laser source</span>
+            <h3>Encode</h3>
+            <p>The token’s input vector is written onto 1550 nm laser light, one channel per value. The modulators that do this already carry the world’s fibre traffic.</p>
+            <dl class="tele"><div><dt>Carrier</dt><dd>λ 1550 nm</dd></div><div><dt>Channels</dt><dd>896 in the first model</dd></div></dl>
+          </article>
+          <article class="step">
+            <span class="tl">Passive weight bank</span>
+            <h3>Multiply</h3>
+            <p>The light crosses the printed glass. Each cell passes a fixed share of it, and that share is the weight, set when the panel was printed. No heaters and no clock in the bank.</p>
+            <dl class="tele"><div><dt>Cell</dt><dd>Non-resonant attenuator</dd></div><div><dt>Power in bank</dt><dd>0 W</dd></div></dl>
+          </article>
+          <article class="step">
+            <span class="tl">Photodetector</span>
+            <h3>Sum</h3>
+            <p>Every path in a row meets one detector. The current it reads is the sum of the products, so each detector delivers one entry of W·x, all at the same moment.</p>
+            <dl class="tele"><div><dt>Readout</dt><dd>Photocurrent</dd></div><div><dt>Signed weights</dt><dd>Two rails, W⁺ − W⁻</dd></div></dl>
+          </article>
+          <article class="step">
+            <span class="tl">Electronics</span>
+            <h3>Return</h3>
+            <p>Converters hand the sums to digital logic, which applies the activation and attention. The result is written back onto light for the next layer, and the loop runs again.</p>
+            <dl class="tele"><div><dt>Layers</dt><dd>24 in the first model</dd></div><div><dt>Then</dt><dd>The next token</dd></div></dl>
+          </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="band" id="product" aria-labelledby="h-product">
+  <section class="ch alt" id="scale" aria-labelledby="h-scale">
     <div class="wrap">
-      <div class="product">
-        <div class="chip-art">
+      <div class="chead rv">
+        <p class="kicker tl">Propagation</p>
+        <h2 id="h-scale">Bigger matrix. Same single pass.</h2>
+        <p>The optical pass stays one pass as the matrix grows from 8×8 to 128×128. The converters and electronics around it still grow with size, and our figures say where they are left out.</p>
+      </div>
+      <div class="scale-panel ret rv">
+        <canvas id="cvScale" role="img" aria-label="Animation: light crosses an 8 by 8, a 32 by 32 and a 128 by 128 weight matrix in the same single pass."></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="product" aria-labelledby="h-product">
+    <div class="wrap">
+      <div class="chead rv">
+        <p class="kicker tl">The processor</p>
+        <h2 id="h-product">A model, printed into glass.</h2>
+        <p>One panel set carries one model version. The weights never move again, so the bank needs no memory traffic and no power of its own.</p>
+      </div>
+      <div class="product rv">
+        <div class="chip-art ret">
           <svg viewBox="0 0 640 420" role="img" aria-label="Drawing of the PMP-1550 weight panel: a glass substrate with a printed polymer crossbar, a fibre array on the left edge and a detector strip on the right.">
-            <rect x="0.5" y="0.5" width="639" height="419" fill="#060709" stroke="#1b1f27"/>
-            <path d="M8 8h12M8 8v12M632 8h-12M632 8v12M8 412h12M8 412v-12M632 412h-12M632 412v-12" stroke="#e6e9f0" stroke-width="1" fill="none"/>
             <rect x="96" y="62" width="452" height="300" fill="#0b0d11" stroke="#484e5b"/>
             <g id="xbar"></g>
             <rect x="40" y="84" width="40" height="256" fill="none" stroke="#484e5b"/>
             <rect x="560" y="84" width="34" height="256" fill="none" stroke="#484e5b"/>
             <g id="fibres"></g>
           </svg>
-          <div class="floor-cap"><span class="mono">Fibre array · 1550 nm in</span><span class="mono">Printed weight bank</span><span class="mono">Detectors · y out</span></div>
+          <div class="chip-cap"><span class="tl">Fibre array · 1550 nm in</span><span class="tl">Printed weight bank</span><span class="tl">Detectors · y out</span></div>
         </div>
         <div>
-          <span class="mono">The processor</span>
+          <span class="tl">Zero-Gate Passive Matrix Processor</span>
           <p class="big-name">PMP-1550</p>
-          <p style="margin:0 0 24px;color:var(--silica-muted);font-size:18px">Zero-Gate Passive Matrix Processor. A glass panel carrying a model’s weights as printed optical paths.</p>
+          <p class="product-sub">A glass panel that carries a model’s weights as printed optical paths.</p>
           <dl class="specs">
-            <div class="spec"><dt class="mono">Weight cell</dt><dd>Non-resonant passive attenuator. Weight = light intensity, so path-length and phase errors do not move it.</dd></div>
-            <div class="spec"><dt class="mono">Material</dt><dd>Optical polymer on glass, printed with UV lithography; nanoimprint at volume.</dd></div>
-            <div class="spec"><dt class="mono">Power in bank</dt><dd>0 W. Power goes to the laser, modulators, detectors and converters.</dd></div>
-            <div class="spec"><dt class="mono">Optical scope</dt><dd>MLP layers, about 81% of multiplies per token. Idle mixture-of-experts weights draw nothing.</dd></div>
-            <div class="spec"><dt class="mono">Model</dt><dd>One panel set per model version. First target: a half-billion-parameter model.</dd></div>
+            <div class="spec"><dt class="tl">Weight cell</dt><dd>Non-resonant passive attenuator. The weight is light intensity, so path-length and phase errors do not move it.</dd></div>
+            <div class="spec"><dt class="tl">Material</dt><dd>Optical polymer on glass, printed with UV lithography; nanoimprint at volume.</dd></div>
+            <div class="spec"><dt class="tl">Power in bank</dt><dd>0 W. Power goes to the laser, modulators, detectors and converters.</dd></div>
+            <div class="spec"><dt class="tl">Optical scope</dt><dd>MLP layers, about 81% of multiplies per token. Idle mixture-of-experts weights draw nothing.</dd></div>
+            <div class="spec"><dt class="tl">Model</dt><dd>One panel set per model version. First target: a half-billion-parameter model.</dd></div>
           </dl>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="band alt" aria-labelledby="h-energy">
+  <section class="ch alt" id="energy" aria-labelledby="h-energy">
     <div class="wrap">
-      <div class="intro">
-        <h2 id="h-energy">Same multiply.<br>A fraction of the energy.</h2>
-        <p>Each square is one femtojoule. Grey is what a commercial chip spends on one multiply. Red is what the OI:LOOP bank spends.</p>
+      <div class="chead rv">
+        <p class="kicker tl">Energy per multiply</p>
+        <h2 id="h-energy">Same multiply. A fraction of the energy.</h2>
+        <p>Each square is one femtojoule. Grey is what a commercial chip spends on one multiply. Red is what the passive weight bank spends.</p>
       </div>
       <div class="stage-tabs" role="tablist" id="etabs" aria-label="Compare with">
-        <button role="tab" aria-selected="true" data-c="0">Chip A</button>
-        <button role="tab" aria-selected="false" data-c="1">Chip B</button>
-        <button role="tab" aria-selected="false" data-c="2">Chip C</button>
+        <button role="tab" aria-selected="true" type="button">Chip A</button>
+        <button role="tab" aria-selected="false" type="button">Chip B</button>
+        <button role="tab" aria-selected="false" type="button">Chip C</button>
       </div>
       <div class="energy">
         <div class="ratio" aria-live="polite">
           <div class="x" id="eX">30–60×</div>
           <p>less energy per multiply than <span id="eName">Chip A, a current flagship GPU</span></p>
-          <div class="eleg mono">
-            <span><i style="background:var(--line)"></i><span id="eLeg">Chip A · ~200 fJ</span></span>
+          <div class="eleg tl">
+            <span><i style="background:var(--grey)"></i><span id="eLeg">Chip A · ~200 fJ</span></span>
             <span><i style="background:var(--laser)"></i>OI:LOOP · 3.3–6.3 fJ</span>
           </div>
         </div>
-        <canvas id="cvE" aria-label="Grid of squares, one per femtojoule, comparing the energy of one multiply on the selected chip with the OI:LOOP bank."></canvas>
+        <div class="egrid ret"><canvas id="cvE" role="img" aria-label="Grid of squares, one per femtojoule, comparing the energy of one multiply on the selected chip with the OI:LOOP weight bank."></canvas></div>
       </div>
       <p class="note">Chips A–C are commercial products, anonymised: A current flagship GPU (~200 fJ), B previous-generation GPU (~1,400 fJ), C photonic accelerator, measured (~2,500 fJ). Their figures come from public datasheets and peer-reviewed measurements, some at system level. OI:LOOP: internal core-level design model with a realistic ADC, not yet measured. Accuracy simulation on a half-billion-parameter model: 8-bit weights +0.04 perplexity; 1% optical error +0.13.</p>
     </div>
   </section>
 
-  <section class="band" id="facility" aria-labelledby="h-fac">
+  <section class="ch" id="facility" aria-labelledby="h-fac">
     <div class="wrap">
-      <div class="intro">
+      <p class="interlude rv">The glass stays with us. The tokens go out.</p>
+      <div class="chead rv">
+        <p class="kicker tl">Optical Inference Facility</p>
         <h2 id="h-fac">How we fill the facility.</h2>
-        <p>OI:LOOP sells tokens, not chips. Each model we serve becomes a set of printed panels in racks in our hall. Space is a cost line, not a limit, and the panels themselves draw no power.</p>
+        <p>OI:LOOP sells tokens, not chips. Each model we serve becomes a set of printed panels in racks in our own hall. Space is a cost line, not a limit, and the panels draw no power.</p>
       </div>
       <div class="stage-tabs" role="tablist" id="ftabs" aria-label="Growth stage">
-        <button role="tab" id="t0" aria-selected="false" data-s="0">Year 2</button>
-        <button role="tab" id="t1" aria-selected="false" data-s="1">Year 3</button>
-        <button role="tab" id="t2" aria-selected="false" data-s="2">Year 4</button>
-        <button role="tab" id="t3" aria-selected="false" data-s="3">Year 5</button>
+        <button role="tab" aria-selected="false" type="button">Year 2</button>
+        <button role="tab" aria-selected="false" type="button">Year 3</button>
+        <button role="tab" aria-selected="false" type="button">Year 4</button>
+        <button role="tab" aria-selected="false" type="button">Year 5</button>
       </div>
       <div class="fac">
-        <div class="floor">
+        <div class="floor ret">
           <div class="floor-grid" id="floor" aria-hidden="true"></div>
           <div class="floor-cap">
-            <span class="mono">Inference hall · 288 rack positions · ~1,500 m²</span>
-            <span class="legend mono"><span><i style="box-shadow:inset 0 0 0 1.5px var(--laser)"></i>added this stage</span><span><i style="background:var(--silica)"></i>installed</span></span>
+            <span class="tl">Inference hall · 288 rack positions · ~1,500 m²</span>
+            <span class="legend tl"><span><i class="lg-new"></i>Added this stage</span><span><i class="lg-on"></i>Installed</span></span>
           </div>
         </div>
         <div aria-live="polite">
           <p class="stage-desc" id="sDesc"></p>
           <div class="facts">
-            <div class="fact"><span class="mono">Printed panel area</span><span class="v" id="fArea"></span></div>
-            <div class="fact"><span class="mono">Panels · racks</span><span class="v" id="fRacks"></span></div>
-            <div class="fact"><span class="mono">Tokens per second</span><span class="v" id="fTok"></span></div>
-            <div class="fact key"><span class="mono">Effective compute</span><span class="v" id="fFlops"></span></div>
+            <div class="fact"><span class="tl">Printed panel area</span><span class="v" id="fArea"></span></div>
+            <div class="fact"><span class="tl">Panels · racks</span><span class="v" id="fRacks"></span></div>
+            <div class="fact"><span class="tl">Tokens per second</span><span class="v" id="fTok"></span></div>
+            <div class="fact key"><span class="tl">Effective compute</span><span class="v" id="fFlops"></span></div>
           </div>
         </div>
       </div>
@@ -490,62 +788,79 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     </div>
   </section>
 
-  <section class="band" id="mcp" aria-labelledby="h-mcp">
+  <section class="ch alt" id="mcp" aria-labelledby="h-mcp">
     <div class="wrap">
-      <div class="intro">
+      <div class="chead rv">
+        <p class="kicker tl">For AI agents</p>
         <h2 id="h-mcp">Ask your AI about OI:LOOP.</h2>
         <p>OI:LOOP runs a public MCP server. Add it to Claude, ChatGPT, Cursor or any MCP client, then ask about the technology, the energy numbers or the facility plan, or join the waitlist from the chat.</p>
       </div>
-      <div class="mcp">
-        <div class="mcp-card mcp-url">
-          <span class="mono">MCP server · Streamable HTTP</span>
+      <div class="mcp rv">
+        <div class="mcp-card mcp-url ret">
+          <span class="tl">MCP server · Streamable HTTP</span>
           <code id="mcpUrl">https://oiloop.com<b>/mcp</b></code>
           <div class="mcp-tools" aria-label="Tools"><span>about_oiloop</span><span>explain_technology</span><span>get_energy_comparison</span><span>get_facility_projection</span><span>join_waitlist</span></div>
-          <div class="ctas" style="margin-top:4px">
-            <button class="btn" id="mcpCopy" type="button"><span class="dot" aria-hidden="true"></span><span id="mcpCopyLbl">Add MCP · copy URL</span></button>
-            <a class="btn ghost" href="/llms.txt">llms.txt</a>
+          <div class="ctas">
+            <button class="btn primary" id="mcpCopy" type="button"><span class="dot" aria-hidden="true"></span><span id="mcpCopyLbl">Add MCP · copy URL</span></button>
+            <a class="btn" href="https://oiloop.com/llms.txt" target="_blank" rel="noopener">llms.txt</a>
           </div>
         </div>
-        <div class="mcp-card mcp-steps">
-          <div><span class="mono">Claude</span><p>Settings → Connectors → Add custom connector. Paste the URL.</p></div>
-          <div><span class="mono">ChatGPT</span><p>Settings → Apps &amp; Connectors → turn on developer mode → Create. Paste the URL.</p></div>
-          <div><span class="mono">Cursor · VS Code · other clients</span><pre>{ "mcpServers": { "oiloop": { "url": "https://oiloop.com/mcp" } } }</pre></div>
+        <div class="mcp-card mcp-steps ret">
+          <div><span class="tl">Claude</span><p>Settings → Connectors → Add custom connector. Paste the URL.</p></div>
+          <div><span class="tl">ChatGPT</span><p>Settings → Apps &amp; Connectors → turn on developer mode → Create. Paste the URL.</p></div>
+          <div><span class="tl">Cursor · VS Code · other clients</span><pre>{ "mcpServers": { "oiloop": { "url": "https://oiloop.com/mcp" } } }</pre></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="band alt" id="faq" aria-labelledby="h-faq">
+  <section class="ch" id="faq" aria-labelledby="h-faq">
     <div class="wrap">
-      <div class="intro">
+      <div class="chead rv">
+        <p class="kicker tl">Company, technology, access</p>
         <h2 id="h-faq">Questions.</h2>
-        <p>Short answers about the company, the technology and access.</p>
+        <p>Short answers. Everything here is also served to AI assistants through the MCP server and llms.txt.</p>
       </div>
-      <div class="faq">
-          <details open><summary>What is OI:LOOP?</summary><p>OI:LOOP is an early-stage company that prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility. It does not sell chips.</p></details>
-          <details><summary>How does a passive optical processor run an AI model?</summary><p>The input is written onto 1550 nm light. The light passes a glass panel where each printed path transmits a fixed share of light, and that share is the weight. Detectors sum the products. Every multiplication of a matrix happens in one pass of light, and electronics handle activations and attention.</p></details>
-          <details><summary>How much energy can it save?</summary><p>In OI:LOOP&#x27;s core-level design model, the passive bank uses 3.3–6.3 femtojoules per multiply, 30–60 times less than a current flagship GPU at about 200 fJ. This is a design model, not yet a measurement.</p></details>
-          <details><summary>Why does the weight bank use no power?</summary><p>The weights are fixed optical paths, not memory cells. There are no heaters, transistors or clocks in the bank, so it draws 0 W. Power goes to the laser, modulators, detectors and converters.</p></details>
-          <details><summary>Which models will OI:LOOP run?</summary><p>First a half-billion-parameter language model end to end, then a ~100B-class mixture-of-experts pilot, then 700B-class models. One printed panel set carries one model version.</p></details>
-          <details><summary>What stage is OI:LOOP at?</summary><p>Architecture, material choice, energy model and accuracy simulation are complete. Nothing has been fabricated yet. The next milestone is printing and measuring an 8×8 weight bank, then a 64×64 tile.</p></details>
-          <details><summary>Why 1550 nm?</summary><p>1550 nm is the wavelength of fibre-optic networks, so lasers, fibres, modulators and detectors are mature, low-cost telecom parts.</p></details>
-          <details><summary>How do I get access?</summary><p>Join the early waitlist on oiloop.com, write to info@oiloop.com, or connect your AI assistant to the OI:LOOP MCP server at https://oiloop.com/mcp.</p></details>
+      <div class="faq rv">
+        <details open><summary>What is OI:LOOP?</summary><p>OI:LOOP is an early-stage company that prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility. It does not sell chips.</p></details>
+        <details><summary>How does a passive optical processor run an AI model?</summary><p>The input is written onto 1550 nm light. The light passes a glass panel where each printed path transmits a fixed share of light, and that share is the weight. Detectors sum the products. Every multiplication of a matrix happens in one pass of light, and electronics handle activations and attention.</p></details>
+        <details><summary>How much energy can it save?</summary><p>In OI:LOOP&#x27;s core-level design model, the passive bank uses 3.3–6.3 femtojoules per multiply, 30–60 times less than a current flagship GPU at about 200 fJ. This is a design model, not yet a measurement.</p></details>
+        <details><summary>Why does the weight bank use no power?</summary><p>The weights are fixed optical paths, not memory cells. There are no heaters, transistors or clocks in the bank, so it draws 0 W. Power goes to the laser, modulators, detectors and converters.</p></details>
+        <details><summary>Which models will OI:LOOP run?</summary><p>First a half-billion-parameter language model end to end, then a ~100B-class mixture-of-experts pilot, then 700B-class models. One printed panel set carries one model version.</p></details>
+        <details><summary>What stage is OI:LOOP at?</summary><p>Architecture, material choice, energy model and accuracy simulation are complete. Nothing has been fabricated yet. The next milestone is printing and measuring an 8×8 weight bank, then a 64×64 tile.</p></details>
+        <details><summary>Why 1550 nm?</summary><p>1550 nm is the wavelength of fibre-optic networks, so lasers, fibres, modulators and detectors are mature, low-cost telecom parts.</p></details>
+        <details><summary>How do I get access?</summary><p>Join the early waitlist on oiloop.com, write to info@oiloop.com, or connect your AI assistant to the OI:LOOP MCP server at https://oiloop.com/mcp.</p></details>
       </div>
     </div>
   </section>
 
-  <section class="band" id="access" aria-labelledby="h-access">
-    <div class="wrap access">
-      <div>
-        <h2 id="h-access">Join the early waitlist.</h2>
-        <p style="color:var(--silica-muted);font-size:18px;max-width:30em;margin:20px 0 0">The first models open to the waitlist as the pilot comes online. API users and infrastructure partners: leave a work email in the console.</p>
-      </div>
-      <div class="console" aria-live="polite">
-        <div class="dim">OI:LOOP CORE // PMP-1550 // REV.5 — AUTHORIZED PARTNERS ONLY</div>
-        <form id="cform" autocomplete="off">
-          <label for="cin"><span>oi-loop-core login:</span><input id="cin" name="cin" type="text" spellcheck="false" placeholder="work email"></label>
-        </form>
-        <div class="out" id="cout"><span class="dim">Or write to <a href="mailto:info@oiloop.com?subject=OI%3ALOOP%20early%20waitlist" style="color:var(--silica)">info@oiloop.com</a>.</span> <span class="cursor" aria-hidden="true"></span></div>
+  <section class="ch alt" id="access" aria-labelledby="h-access">
+    <div class="wrap">
+      <p class="interlude rv">Weights in Light. Compute in Motion.</p>
+      <div class="access">
+        <div class="rv">
+          <p class="kicker tl">Early access</p>
+          <h2 id="h-access">Join the early waitlist.</h2>
+          <p class="lede">The first models open to the waitlist as the pilot comes online. API users and infrastructure partners: leave a work email in the console.</p>
+          <div class="console ret" aria-live="polite">
+            <div class="dim">OI:LOOP CORE // PMP-1550 // REV.5 · AUTHORIZED PARTNERS ONLY</div>
+            <form id="cform" autocomplete="off" novalidate>
+              <label for="cin"><span>oi-loop-core login:</span><input id="cin" name="cin" type="email" inputmode="email" spellcheck="false" placeholder="work email"></label>
+            </form>
+            <div class="out" id="cout"><span class="dim">Press Enter to join. Or write to info@oiloop.com.</span> <span class="cursor" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="rv" id="follow">
+          <p class="kicker tl">Follow the build</p>
+          <h3 class="h2">Watch it get built.</h3>
+          <p class="lede">We post the first printed bank, the measurements and what goes wrong, as it happens.</p>
+          <div class="ports">
+            <a class="port" href="https://www.linkedin.com/company/oiloop/" target="_blank" rel="me noopener"><span class="jack" aria-hidden="true"></span><span class="pn"><span class="pname">LinkedIn</span><span class="ph">/company/oiloop</span></span><span class="pd">Company news, milestones and hiring</span><span class="arr" aria-hidden="true">↗</span></a>
+            <a class="port" href="https://x.com/OpIntLoop" target="_blank" rel="me noopener"><span class="jack" aria-hidden="true"></span><span class="pn"><span class="pname">X</span><span class="ph">@OpIntLoop</span></span><span class="pd">Build notes and short updates</span><span class="arr" aria-hidden="true">↗</span></a>
+            <a class="port" href="https://www.instagram.com/o.i.l.o.o.p/" target="_blank" rel="me noopener"><span class="jack" aria-hidden="true"></span><span class="pn"><span class="pname">Instagram</span><span class="ph">@o.i.l.o.o.p</span></span><span class="pd">The lab in pictures</span><span class="arr" aria-hidden="true">↗</span></a>
+            <a class="port" href="https://github.com/OpIntLoop" target="_blank" rel="me noopener"><span class="jack" aria-hidden="true"></span><span class="pn"><span class="pname">GitHub</span><span class="ph">OpIntLoop</span></span><span class="pd">Simulator, website and MCP server</span><span class="arr" aria-hidden="true">↗</span></a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -553,8 +868,27 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
 
 <footer class="site">
   <div class="wrap">
-    <span class="wm" style="font-size:22px">OI<i>:</i><span>LOOP</span></span>
-    <span class="mono">SYS.ID // PMP-1550 // REV.5 · <a href="mailto:info@oiloop.com" style="text-decoration:none">info@oiloop.com</a> · <a href="https://oiloop.com/llms.txt" style="text-decoration:none" title="Overview and MCP server for AI agents: https://oiloop.com/mcp">AI agents: MCP</a> · <a href="https://www.linkedin.com/company/oiloop/" rel="me noopener" target="_blank" style="text-decoration:none">LinkedIn</a> · <a href="https://x.com/OpIntLoop" rel="me noopener" target="_blank" style="text-decoration:none">X</a> · <a href="https://www.instagram.com/o.i.l.o.o.p/" rel="me noopener" target="_blank" style="text-decoration:none">Instagram</a> · <a href="https://github.com/OpIntLoop" rel="me noopener" target="_blank" style="text-decoration:none">GitHub</a> · © 2026</span>
+    <div class="f-grid">
+      <div class="f-about">
+        <span class="wm" style="font-size:26px">OI<i>:</i><span>LOOP</span></span>
+        <p class="axiom">Weights in Light. Compute in Motion.</p>
+        <div class="email"><a href="mailto:info@oiloop.com">info@oiloop.com</a><button class="copy" type="button" data-copy="info@oiloop.com">Copy</button></div>
+      </div>
+      <div class="f-col">
+        <h3 class="tl">The story</h3>
+        <ul><li><a href="#wall">The energy wall</a></li><li><a href="#technology">One pass of light</a></li><li><a href="#loop">The loop</a></li><li><a href="#product">Processor</a></li><li><a href="#facility">Facility</a></li></ul>
+      </div>
+      <div class="f-col">
+        <h3 class="tl">Follow</h3>
+        <ul><li><a href="https://www.linkedin.com/company/oiloop/" target="_blank" rel="me noopener">LinkedIn</a></li><li><a href="https://x.com/OpIntLoop" target="_blank" rel="me noopener">X</a></li><li><a href="https://www.instagram.com/o.i.l.o.o.p/" target="_blank" rel="me noopener">Instagram</a></li><li><a href="https://github.com/OpIntLoop" target="_blank" rel="me noopener">GitHub</a></li></ul>
+      </div>
+      <div class="f-col">
+        <h3 class="tl">For AI agents</h3>
+        <ul><li><a href="#mcp">MCP server</a></li><li><a href="https://oiloop.com/llms.txt" target="_blank" rel="noopener">llms.txt</a></li><li><a href="#faq">Questions</a></li><li><a href="#access">Early waitlist</a></li></ul>
+      </div>
+    </div>
+    <p class="f-mark" aria-hidden="true"><span class="wm">OI<i>:</i><span>LOOP</span></span></p>
+    <div class="f-base"><span class="tl">SYS.ID // PMP-1550 // REV.5</span><span class="tl">© 2026 OI:LOOP · Figures are design targets, not measurements</span></div>
   </div>
 </footer>
 
@@ -562,43 +896,92 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var LASER = '#ff1e00', SILICA = '#e6e9f0', LINE = '#484e5b', SOFT = '#1b1f27', LABEL = '#7a8291';
+  var hasIO = 'IntersectionObserver' in window;
+
+  function setup(cv){
+    var ctx = cv.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = cv.clientWidth, h = cv.clientHeight; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return {ctx: ctx, w: w, h: h};
+  }
+  function onVisible(el, cb, opts){
+    if (!hasIO){ cb(true); return; }
+    new IntersectionObserver(function(es){ es.forEach(function(e){ cb(e.isIntersecting); }); }, opts || {}).observe(el);
+  }
+
+  /* ---------- hero: Newton-ring texture, SMIL pause ---------- */
+  (function(){
+    var NS = 'http://www.w3.org/2000/svg', g = document.getElementById('newton');
+    for (var n = 1; n <= 64; n++){
+      var c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', 360); c.setAttribute('cy', 320); c.setAttribute('r', (46 * Math.sqrt(n)).toFixed(1));
+      g.appendChild(c);
+    }
+    var svg = document.getElementById('heroSvg');
+    if (reduce && svg.pauseAnimations){ svg.pauseAnimations(); svg.setCurrentTime(0); }
+  })();
+
+  /* ---------- menu ---------- */
+  (function(){
+    var btn = document.getElementById('menuBtn'), menu = document.getElementById('menu');
+    function set(open){
+      menu.hidden = !open; btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? 'Close' : 'Menu'; document.body.classList.toggle('menu-open', open);
+      if (open){ var a = menu.querySelector('a'); if (a) a.focus(); }
+    }
+    btn.addEventListener('click', function(){ set(menu.hidden); });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) set(false); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !menu.hidden){ set(false); btn.focus(); } });
+    window.addEventListener('resize', function(){ if (window.innerWidth > 900 && !menu.hidden) set(false); });
+  })();
+
+  /* ---------- scrollspy (native :target-current where supported) + chapter nodes ---------- */
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav.main a'));
+    var chapters = Array.prototype.slice.call(document.querySelectorAll('section.ch'));
+    var native = window.CSS && CSS.supports && CSS.supports('scroll-target-group: auto');
+    function syncAria(){
+      var cur = null; try { cur = document.querySelector('nav.main a:target-current'); } catch (e){}
+      links.forEach(function(l){ l.setAttribute('aria-current', l === cur ? 'true' : 'false'); });
+    }
+    if (native){ syncAria(); document.addEventListener('scrollend', syncAria); }
+    if (!hasIO) { chapters.forEach(function(c){ c.classList.add('on'); }); return; }
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var idx = chapters.indexOf(e.target);
+        chapters.forEach(function(c, i){ c.classList.toggle('on', i <= idx); });
+        if (!native){
+          links.forEach(function(l){ var a = l.getAttribute('href') === '#' + e.target.id; l.classList.toggle(':target-current', a); l.setAttribute('aria-current', a ? 'true' : 'false'); });
+        }
+      });
+    }, {rootMargin: '-50% 0px -50% 0px'});
+    chapters.forEach(function(c){ io.observe(c); });
+  })();
 
   /* ---------- product drawing: crossbar + fibres ---------- */
   (function(){
     var NS = 'http://www.w3.org/2000/svg', g = document.getElementById('xbar'), fb = document.getElementById('fibres');
     var n = 16, x0 = 120, y0 = 92, w = 404, h = 240, dx = w / n, dy = h / n, seed = 11;
     function rnd(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
     for (var r = 0; r < n; r++){
       var y = y0 + dy * (r + .5);
-      var l = document.createElementNS(NS, 'line');
-      l.setAttribute('x1', 80); l.setAttribute('x2', x0 + w); l.setAttribute('y1', y); l.setAttribute('y2', y);
-      l.setAttribute('stroke', LASER); l.setAttribute('stroke-opacity', '.55'); l.setAttribute('stroke-width', '1');
-      g.appendChild(l);
-      var f = document.createElementNS(NS, 'rect');
-      f.setAttribute('x', 44); f.setAttribute('y', y - 3); f.setAttribute('width', 32); f.setAttribute('height', 6); f.setAttribute('fill', LINE);
-      fb.appendChild(f);
+      el('line', {x1: 80, x2: x0 + w, y1: y, y2: y, stroke: LASER, 'stroke-opacity': '.55', 'stroke-width': 1}, g);
+      el('rect', {x: 44, y: y - 3, width: 32, height: 6, fill: LINE}, fb);
     }
     for (var c = 0; c < n; c++){
       var x = x0 + dx * (c + .5);
-      var v = document.createElementNS(NS, 'line');
-      v.setAttribute('x1', x); v.setAttribute('x2', x); v.setAttribute('y1', y0); v.setAttribute('y2', y0 + h);
-      v.setAttribute('stroke', SILICA); v.setAttribute('stroke-opacity', '.14');
-      g.appendChild(v);
-      var d = document.createElementNS(NS, 'rect');
-      d.setAttribute('x', 566); d.setAttribute('y', y0 + dy * c + 2); d.setAttribute('width', 22); d.setAttribute('height', dy - 4); d.setAttribute('fill', SILICA); d.setAttribute('fill-opacity', (.25 + .7 * rnd()).toFixed(2));
-      fb.appendChild(d);
+      el('line', {x1: x, x2: x, y1: y0, y2: y0 + h, stroke: SILICA, 'stroke-opacity': '.14'}, g);
+      el('rect', {x: 566, y: y0 + dy * c + 2, width: 22, height: dy - 4, fill: SILICA, 'fill-opacity': (.25 + .7 * rnd()).toFixed(2)}, fb);
       for (var r2 = 0; r2 < n; r2++){
-        var cell = document.createElementNS(NS, 'rect'), s = 7;
-        cell.setAttribute('x', x - s / 2); cell.setAttribute('y', y0 + dy * (r2 + .5) - s / 2); cell.setAttribute('width', s); cell.setAttribute('height', s);
-        cell.setAttribute('fill', SILICA); cell.setAttribute('fill-opacity', (.06 + .8 * Math.pow(rnd(), 1.5)).toFixed(2));
-        g.appendChild(cell);
+        el('rect', {x: x - 3.5, y: y0 + dy * (r2 + .5) - 3.5, width: 7, height: 7, fill: SILICA, 'fill-opacity': (.06 + .8 * Math.pow(rnd(), 1.5)).toFixed(2)}, g);
       }
     }
   })();
 
   /* ---------- world need ---------- */
   (function(){
-    var need = document.getElementById('need'), cv = document.getElementById('cvNeed'), sn, prog = reduce ? 1 : 0, t0 = 0;
+    var need = document.getElementById('need'), cv = document.getElementById('cvNeed'), sn, prog = reduce ? 1 : 0, t0 = 0, started = false;
     var ci = document.getElementById('cellsInf'), ct = document.getElementById('cellsTok');
     for (var a = 0; a < 100; a++){ var e = document.createElement('i'); e.className = a < 55 ? 'inf' : 'gr'; e.style.transitionDelay = (a * 14) + 'ms'; ci.appendChild(e); }
     for (var b = 0; b < 65; b++){ var f = document.createElement('i'); f.className = b === 0 ? 'mul' : 'gr'; f.style.transitionDelay = (b === 0 ? 0 : 300 + b * 18) + 'ms'; ct.appendChild(f); }
@@ -611,35 +994,41 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
       [0, 250, 500, 750, 1000].forEach(function(v){ ctx.strokeStyle = SOFT; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(L, Y(v) + .5); ctx.lineTo(w - R, Y(v) + .5); ctx.stroke(); ctx.fillStyle = LABEL; ctx.textAlign = 'right'; ctx.fillText(v, L - 10, Y(v)); });
       ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
       for (var yr = 2024; yr <= 2030; yr++){ if (w < 500 && yr % 2) continue; ctx.fillStyle = LABEL; ctx.fillText(yr, X(yr), h - 8); }
-      var e = prog < .5 ? 2 * prog * prog : 1 - Math.pow(-2 * prog + 2, 2) / 2;
-      var yr1 = 2024 + 6 * e, v1 = 415 + 530 * e;
+      var ez = prog < .5 ? 2 * prog * prog : 1 - Math.pow(-2 * prog + 2, 2) / 2;
+      var yr1 = 2024 + 6 * ez, v1 = 415 + 530 * ez;
       ctx.fillStyle = 'rgba(230,233,240,.07)';
       ctx.beginPath(); ctx.moveTo(X(2024), Y(0)); ctx.lineTo(X(2024), Y(415)); ctx.lineTo(X(yr1), Y(v1)); ctx.lineTo(X(yr1), Y(0)); ctx.closePath(); ctx.fill();
       ctx.strokeStyle = SILICA; ctx.lineWidth = 2.5; ctx.setLineDash([9, 6]); ctx.beginPath(); ctx.moveTo(X(2024), Y(415)); ctx.lineTo(X(yr1), Y(v1)); ctx.stroke(); ctx.setLineDash([]);
       ctx.fillStyle = SILICA; ctx.fillRect(X(2024) - 5, Y(415) - 5, 10, 10);
       ctx.textAlign = 'left'; ctx.font = '13px "JetBrains Mono", monospace'; ctx.fillText('415', X(2024) + 12, Y(415) + 18);
-      if (e > 0 && e < 1){ ctx.fillStyle = LASER; ctx.fillRect(X(yr1) - 1, Y(v1) - 14, 2, Y(0) - Y(v1) + 14); }
-      if (e >= 1){ ctx.fillStyle = LASER; ctx.fillRect(X(2030) - 6, Y(945) - 6, 12, 12); ctx.textAlign = 'right'; ctx.fillStyle = SILICA; ctx.fillText('945 · ×2.3', X(2030) - 2, Y(945) + 28); }
-      cnt.textContent = Math.round(v1); tag.textContent = e >= 1 ? '2030 · projected' : String(Math.floor(yr1));
+      if (ez > 0 && ez < 1){ ctx.fillStyle = LASER; ctx.fillRect(X(yr1) - 1, Y(v1) - 14, 2, Y(0) - Y(v1) + 14); }
+      if (ez >= 1){ ctx.fillStyle = LASER; ctx.fillRect(X(2030) - 6, Y(945) - 6, 12, 12); ctx.textAlign = 'right'; ctx.fillStyle = SILICA; ctx.fillText('945 · ×2.3', X(2030) - 2, Y(945) + 28); }
+      cnt.textContent = Math.round(v1); tag.textContent = ez >= 1 ? '2030 · projected' : String(Math.floor(yr1));
     }
     function frame(ts){ if (!t0) t0 = ts; prog = Math.min(1, (ts - t0) / 2400); draw(); if (prog < 1) requestAnimationFrame(frame); }
     function lay(){ sn = setup(cv); draw(); }
     lay(); window.addEventListener('resize', lay);
-    if (reduce || !('IntersectionObserver' in window)){ need.classList.add('in'); prog = 1; draw(); return; }
-    var io = new IntersectionObserver(function(es){ es.forEach(function(x){ if (x.isIntersecting){ need.classList.add('in'); requestAnimationFrame(frame); io.disconnect(); } }); }, {threshold: .2});
-    io.observe(need);
+    if (reduce || !hasIO){ need.classList.add('in'); prog = 1; draw(); return; }
+    onVisible(need, function(v){ if (v && !started){ started = true; need.classList.add('in'); requestAnimationFrame(frame); } }, {threshold: .2});
   })();
 
-  /* ---------- auto-cycling tabs helper ---------- */
-  function autoTabs(listId, n, onShow, watchId){
+  /* ---------- auto-cycling tabs ---------- */
+  function autoTabs(listId, n, onShow, watchEl){
     var list = document.getElementById(listId), cur = 0, timer = null, manual = false, DUR = 3600;
-    function sel(i){ cur = i; list.querySelectorAll('button').forEach(function(b, k){ b.setAttribute('aria-selected', k === i ? 'true' : 'false'); }); onShow(i); }
+    var btns = Array.prototype.slice.call(list.querySelectorAll('button'));
+    function sel(i){ cur = i; btns.forEach(function(b, k){ b.setAttribute('aria-selected', k === i ? 'true' : 'false'); b.tabIndex = k === i ? 0 : -1; }); onShow(i); }
     function start(){ if (timer || manual || reduce) return; list.classList.add('auto'); sel(cur); timer = setInterval(function(){ sel((cur + 1) % n); }, DUR); }
     function stop(){ clearInterval(timer); timer = null; list.classList.remove('auto'); }
-    list.querySelectorAll('button').forEach(function(b, k){ b.addEventListener('click', function(){ manual = true; stop(); sel(k); }); });
-    if (reduce || !('IntersectionObserver' in window)){ sel(n - 1); return; }
+    btns.forEach(function(b, k){
+      b.addEventListener('click', function(){ manual = true; stop(); sel(k); });
+      b.addEventListener('keydown', function(e){
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return; e.preventDefault(); manual = true; stop(); var j = (k + d + n) % n; sel(j); btns[j].focus();
+      });
+    });
+    if (reduce || !hasIO){ sel(n - 1); return; }
     sel(0);
-    new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) start(); else stop(); }); }, {threshold: .25}).observe(document.getElementById(watchId));
+    onVisible(watchEl, function(v){ if (v) start(); else stop(); }, {threshold: .25});
   }
 
   /* ---------- energy grid: one square per femtojoule ---------- */
@@ -673,7 +1062,7 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     cancelAnimationFrame(eRaf); eT0 = 0; eRaf = requestAnimationFrame(eDraw);
   }
   se = setup(cvE);
-  autoTabs('etabs', 3, eShow, 'etabs');
+  autoTabs('etabs', 3, eShow, document.getElementById('energy'));
 
   /* ---------- scale band: same single pass at any size ---------- */
   var cvS = document.getElementById('cvScale'), ss, mats = [], SIZES = [8, 32, 128], sVisible = false, sT0 = 0;
@@ -688,14 +1077,14 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
       if (vert){ var rowH = ss.h / 3; x = 22; y = rowH * i + (rowH - 88 - S) + 8; }
       else { var colW = ss.w / 3; x = colW * i + 22; y = base - S + 8; }
       var dim = document.createElement('canvas'), lit = document.createElement('canvas');
-      dim.width = lit.width = Math.round(S * dpr); dim.height = lit.height = Math.round(S * dpr);
+      dim.width = lit.width = Math.max(1, Math.round(S * dpr)); dim.height = lit.height = Math.max(1, Math.round(S * dpr));
       var dc = dim.getContext('2d'), lc = lit.getContext('2d'), cpx = S * dpr / n, gap = cpx > 5 ? 1.2 * dpr : (cpx > 2.5 ? .5 * dpr : 0);
       for (var a = 0; a < n * n; a++){
         var w = Math.pow(r3(), 1.5), cx = (a % n) * cpx, cy = Math.floor(a / n) * cpx;
         dc.fillStyle = 'rgba(230,233,240,' + (.05 + .1 * w).toFixed(3) + ')'; dc.fillRect(cx + gap / 2, cy + gap / 2, cpx - gap, cpx - gap);
         lc.fillStyle = 'rgba(230,233,240,' + (.18 + .8 * w).toFixed(3) + ')'; lc.fillRect(cx + gap / 2, cy + gap / 2, cpx - gap, cpx - gap);
       }
-      mats.push({n: n, S: S, x: x, y: y, dim: dim, lit: lit, vert: vert});
+      mats.push({n: n, S: S, x: x, y: y, dim: dim, lit: lit});
     });
   }
   function sDraw(ts){
@@ -705,7 +1094,7 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     mats.forEach(function(m){
       var x = m.x + 14, fx = m.S * ease;
       ctx.drawImage(m.dim, x, m.y, m.S, m.S);
-      if (fx > 0) ctx.drawImage(m.lit, 0, 0, m.lit.width * ease, m.lit.height, x, m.y, fx, m.S);
+      if (fx > 0) ctx.drawImage(m.lit, 0, 0, Math.max(1, m.lit.width * ease), m.lit.height, x, m.y, fx, m.S);
       var step = m.S / m.n; ctx.fillStyle = LASER;
       var every = m.n > 32 ? 4 : 1;
       for (var r = 0; r < m.n; r += every){ ctx.fillRect(x - 14, m.y + r * step + step * every / 2 - .6, 10, 1.2); }
@@ -720,28 +1109,20 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     if (sVisible && !reduce) requestAnimationFrame(sDraw);
   }
   sBuild();
-  if (reduce || !('IntersectionObserver' in window)) sDraw(0);
-  else new IntersectionObserver(function(es){ es.forEach(function(e){ var was = sVisible; sVisible = e.isIntersecting; if (sVisible && !was) requestAnimationFrame(sDraw); }); }).observe(cvS);
-  window.addEventListener('resize', function(){ se = setup(cvE); eT0 = 0; eRaf = requestAnimationFrame(eDraw); sBuild(); if (reduce) sDraw(0); });
+  if (reduce || !hasIO) sDraw(0);
+  else onVisible(cvS, function(v){ var was = sVisible; sVisible = v; if (v && !was) requestAnimationFrame(sDraw); });
 
   /* ---------- sequential vs parallel ---------- */
   var N = 16, seed2 = 5;
   function rnd2(){ seed2 = (seed2 * 16807) % 2147483647; return (seed2 - 1) / 2147483646; }
   var Wt = []; for (var i = 0; i < N * N; i++) Wt.push(.08 + .9 * Math.pow(rnd2(), 1.4));
-  function setup(cv){
-    var ctx = cv.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = cv.clientWidth, h = cv.clientHeight; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return {ctx: ctx, w: w, h: h};
-  }
   var A = document.getElementById('cvSeq'), B = document.getElementById('cvPar'), sa, sb;
   var seqOut = document.getElementById('seqCount'), parOut = document.getElementById('parCount');
   function grid(s){ var pad = Math.max(28, s.w * .1), size = Math.min(s.w - pad * 2, s.h - pad * 1.4); return {x: (s.w - size) / 2 + 8, y: (s.h - size) / 2, c: size / N}; }
   function drawSeq(t){
     var s = sa, ctx = s.ctx, g = grid(s), done = Math.min(N * N, Math.floor(t * 40));
     ctx.clearRect(0, 0, s.w, s.h);
-    // memory block
     ctx.strokeStyle = LINE; ctx.strokeRect(6, g.y, 14, g.c * N);
-    ctx.fillStyle = LABEL; ctx.font = '10px "JetBrains Mono", monospace';
     for (var k = 0; k < N * N; k++){
       var r = Math.floor(k / N), c = k % N, x = g.x + c * g.c, y = g.y + r * g.c;
       ctx.strokeStyle = SOFT; ctx.strokeRect(x + 1.5, y + 1.5, g.c - 3, g.c - 3);
@@ -749,7 +1130,7 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     }
     if (done < N * N){
       var r2 = Math.floor(done / N), c2 = done % N, cx = g.x + c2 * g.c + g.c / 2, cy = g.y + r2 * g.c + g.c / 2;
-      ctx.strokeStyle = 'rgba(122,130,145,.9)'; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(cx - g.c / 2, cy); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = 'rgba(122,130,145,.9)'; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(cx - g.c / 2, cy); ctx.stroke(); ctx.setLineDash([]);
       ctx.strokeStyle = SILICA; ctx.strokeRect(cx - g.c / 2 + 1, cy - g.c / 2 + 1, g.c - 2, g.c - 2);
     }
     seqOut.textContent = done + ' / 256';
@@ -764,37 +1145,66 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
       ctx.strokeStyle = LASER; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(6, y); ctx.lineTo(Math.min(fx, g.x + span), y); ctx.stroke();
     }
     ctx.lineWidth = 1;
-    var lit = 0;
     for (var k = 0; k < N * N; k++){
       var rr = Math.floor(k / N), cc = k % N, x = g.x + cc * g.c, yy = g.y + rr * g.c;
       ctx.strokeStyle = SOFT; ctx.strokeRect(x + 1.5, yy + 1.5, g.c - 3, g.c - 3);
-      if (x + g.c / 2 <= fx){ lit++; ctx.fillStyle = 'rgba(230,233,240,' + (.15 + .75 * Wt[k]).toFixed(2) + ')'; ctx.fillRect(x + 3, yy + 3, g.c - 6, g.c - 6); }
+      if (x + g.c / 2 <= fx){ ctx.fillStyle = 'rgba(230,233,240,' + (.15 + .75 * Wt[k]).toFixed(2) + ')'; ctx.fillRect(x + 3, yy + 3, g.c - 6, g.c - 6); }
     }
     if (front < 1){ ctx.strokeStyle = LASER; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(fx, g.y - 6); ctx.lineTo(fx, g.y + span + 6); ctx.stroke(); ctx.lineWidth = 1; }
     parOut.textContent = (front >= 1 ? 256 : Math.round(256 * front)) + ' / 256' + (front >= 1 ? ' in one pass' : '');
   }
-  var start = 0, cycle = 7.2, running = !reduce, visible = true;
-  function frame(ts){
-    if (!start) start = ts;
-    var t = ((ts - start) / 1000) % cycle;
+  var vStart = 0, cycle = 7.2, vVisible = false;
+  function vFrame(ts){
+    if (!vStart) vStart = ts;
+    var t = ((ts - vStart) / 1000) % cycle;
     drawSeq(t); drawPar(t);
-    if (running && visible) requestAnimationFrame(frame);
+    if (vVisible) requestAnimationFrame(vFrame);
   }
-  function layout(){ sa = setup(A); sb = setup(B); if (!running){ drawSeq(cycle); drawPar(cycle); } }
-  window.addEventListener('resize', layout);
-  layout();
-  if (running){
-    if ('IntersectionObserver' in window){
-      var io2 = new IntersectionObserver(function(es){ es.forEach(function(e){ var was = visible; visible = e.isIntersecting; if (visible && !was) requestAnimationFrame(frame); }); });
-      io2.observe(document.getElementById('technology'));
+  function vLayout(){ sa = setup(A); sb = setup(B); if (reduce || !vVisible){ drawSeq(reduce ? cycle : 0); drawPar(reduce ? cycle : 0); } }
+  vLayout();
+  if (!reduce) onVisible(document.getElementById('technology'), function(v){ var was = vVisible; vVisible = v; if (v && !was) requestAnimationFrame(vFrame); });
+
+  /* ---------- the loop: scroll steps + pulse around the loop ---------- */
+  (function(){
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+    var nodes = Array.prototype.slice.call(document.querySelectorAll('.lnode'));
+    var segs = Array.prototype.slice.call(document.querySelectorAll('.seg'));
+    var path = document.getElementById('loopPath'), pulse = document.getElementById('loopPulse');
+    var layerEl = document.getElementById('loopLayer'), tokEl = document.getElementById('loopToken');
+    var total = path.getTotalLength(), CORNER = [0, 300, 680, 980], act = -1;
+    function pad(n, w){ n = String(n); while (n.length < w) n = '0' + n; return n; }
+    function place(len){ var p = path.getPointAtLength(len % total); pulse.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')'); }
+    function setAct(i){
+      if (i === act || i < 0) return; act = i;
+      steps.forEach(function(s, k){ s.classList.toggle('act', k === i); });
+      nodes.forEach(function(s, k){ s.classList.toggle('act', k === i); });
+      segs.forEach(function(s, k){ s.classList.toggle('act', k === i); });
+      if (reduce){ place(CORNER[i]); pulse.style.fill = i < 2 ? LASER : SILICA; }
     }
-    requestAnimationFrame(frame);
-  }
+    setAct(0);
+    if (hasIO){
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) setAct(steps.indexOf(e.target)); }); }, {rootMargin: '-45% 0px -45% 0px'});
+      steps.forEach(function(s){ io.observe(s); });
+    }
+    if (reduce){ place(0); return; }
+    /* light covers the optical half of the loop fast; converters and electronics take most of the lap */
+    var LAP = 4200, OPT = .22, elapsed = 0, last = 0, lap = 0, layer = 1, tok = 1, vis = false;
+    function frame(ts){
+      if (!last) last = ts;
+      elapsed += Math.min(64, ts - last); last = ts;
+      var l = Math.floor(elapsed / LAP), u = (elapsed % LAP) / LAP;
+      if (l !== lap){ lap = l; layer++; if (layer > 24){ layer = 1; tok++; } layerEl.textContent = 'LAYER ' + pad(layer, 2) + ' / 24'; tokEl.textContent = 'TOKEN ' + pad(tok, 4); }
+      var len = u < OPT ? (u / OPT) * 680 : 680 + ((u - OPT) / (1 - OPT)) * 680;
+      place(len); pulse.style.fill = len < 680 ? LASER : SILICA;
+      if (vis) requestAnimationFrame(frame); else last = 0;
+    }
+    onVisible(document.getElementById('loopFig'), function(v){ var was = vis; vis = v; if (v && !was){ last = 0; requestAnimationFrame(frame); } });
+  })();
 
   /* ---------- facility fill ---------- */
   var SLOTS = 288, floor = document.getElementById('floor'), slots = [];
   for (var q = 0; q < SLOTS; q++){ var d = document.createElement('div'); d.className = 'slot'; floor.appendChild(d); slots.push(d); }
-  var AREA_PER_PARAM = 5000e-12; // m2 per parameter (assumption)
+  var AREA_PER_PARAM = 5000e-12; // m2 per parameter (planning assumption)
   function racksFor(params){ return Math.max(1, Math.ceil(Math.ceil(params * AREA_PER_PARAM) / 40)); }
   var stages = [
     {desc: 'A half-billion-parameter model, end to end. The first full language model on printed panels.', params: .358e9, active: .358e9, tok: 1e6},
@@ -803,21 +1213,13 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     {desc: 'Three 700B-class models serving the API from one hall.', params: 2100e9, active: 111e9, tok: 3e7}
   ];
   function fmtArea(m2){ return m2 < 10 ? m2.toFixed(1) + ' m²' : Math.round(m2).toLocaleString('en-US') + ' m²'; }
-  function fmtFlops(f){ var u = [['EFLOPS',1e18],['PFLOPS',1e15],['TFLOPS',1e12],['GFLOPS',1e9]]; for (var i = 0; i < u.length; i++){ if (f >= u[i][1]) return (f / u[i][1]).toLocaleString('en-US', {maximumFractionDigits: f / u[i][1] < 10 ? 1 : 0}) + ' ' + u[i][0]; } return f + ' FLOPS'; }
+  function fmtFlops(f){ var u = [['EFLOPS', 1e18], ['PFLOPS', 1e15], ['TFLOPS', 1e12], ['GFLOPS', 1e9]]; for (var i = 0; i < u.length; i++){ if (f >= u[i][1]) return (f / u[i][1]).toLocaleString('en-US', {maximumFractionDigits: f / u[i][1] < 10 ? 1 : 0}) + ' ' + u[i][0]; } return f + ' FLOPS'; }
   function fmtTok(t){ return t >= 1e6 ? (t / 1e6) + 'M' : t.toLocaleString('en-US'); }
-  var cumul = [];
-  (function(){ var prev = 0; stages.forEach(function(s, i){ var r = racksFor(s.params); if (i === 0) r = 1; cumul.push({prev: prev, now: (i === 1 ? 0 : prev) + r}); prev = (i === 1 ? 0 : prev) + r; }); })();
-  // stage 2 replaces stage 1 rack in the hall (pilot), stage 3 adds the 700B racks on top of the pilot
-  cumul = [];
   var r0 = 1, r1 = racksFor(stages[1].params), r2 = racksFor(stages[2].params), r3 = racksFor(stages[3].params);
-  cumul.push({base: 0, total: r0});
-  cumul.push({base: r0, total: r0 + r1});
-  cumul.push({base: r0 + r1, total: r0 + r1 + r2});
-  cumul.push({base: r0 + r1 + r2, total: Math.min(SLOTS, r0 + r1 + r3)});
+  var cumul = [{base: 0, total: r0}, {base: r0, total: r0 + r1}, {base: r0 + r1, total: r0 + r1 + r2}, {base: r0 + r1 + r2, total: Math.min(SLOTS, r0 + r1 + r3)}];
   function show(i){
     var s = stages[i], c = cumul[i];
-    var base = i === 3 ? r0 + r1 + r2 : c.base;
-    slots.forEach(function(el, k){ var fr = k >= base && k < c.total; el.style.transitionDelay = fr && !reduce ? Math.min(2200, (k - base) * 12) + 'ms' : '0ms'; el.className = 'slot' + (k < base ? ' on' : (fr ? ' fresh' : '')); });
+    slots.forEach(function(el, k){ var fr = k >= c.base && k < c.total; el.style.transitionDelay = fr && !reduce ? Math.min(2200, (k - c.base) * 12) + 'ms' : '0ms'; el.className = 'slot' + (k < c.base ? ' on' : (fr ? ' fresh' : '')); });
     var area = s.params * AREA_PER_PARAM, panels = Math.ceil(area), racks = racksFor(s.params);
     document.getElementById('sDesc').textContent = s.desc;
     document.getElementById('fArea').textContent = fmtArea(area);
@@ -825,29 +1227,36 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
     document.getElementById('fTok').textContent = fmtTok(s.tok);
     document.getElementById('fFlops').textContent = fmtFlops(2 * s.active * s.tok);
   }
-  autoTabs('ftabs', 4, show, 'facility');
+  autoTabs('ftabs', 4, show, document.getElementById('facility'));
 
-  /* ---------- MCP copy ---------- */
+  /* ---------- copy buttons ---------- */
+  function copyText(text, onDone, selectEl){
+    function fallback(){
+      try { var r = document.createRange(); r.selectNodeContents(selectEl); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); onDone(document.execCommand('copy')); }
+      catch (e){ onDone(false); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ onDone(true); }, fallback); } else fallback();
+  }
   var mcpBtn = document.getElementById('mcpCopy'), mcpLbl = document.getElementById('mcpCopyLbl');
   mcpBtn.addEventListener('click', function(){
-    var url = 'https://oiloop.com/mcp';
-    function done(ok){ mcpLbl.textContent = ok ? 'Copied · paste into your AI client' : url; setTimeout(function(){ mcpLbl.textContent = 'Add MCP · copy URL'; }, 2600); }
-    function fallback(){ try { var r = document.createRange(); r.selectNodeContents(document.getElementById('mcpUrl')); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); done(document.execCommand('copy')); } catch (e){ done(false); } }
-    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(function(){ done(true); }, fallback); } else fallback();
+    copyText('https://oiloop.com/mcp', function(ok){ mcpLbl.textContent = ok ? 'Copied · paste into your AI client' : 'Select the URL above and copy it'; setTimeout(function(){ mcpLbl.textContent = 'Add MCP · copy URL'; }, 2600); }, document.getElementById('mcpUrl'));
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'), function(b){
+    b.addEventListener('click', function(){
+      var lbl = b.textContent;
+      copyText(b.getAttribute('data-copy'), function(ok){ b.textContent = ok ? 'Copied' : 'Select and copy'; setTimeout(function(){ b.textContent = lbl; }, 2200); }, b.previousElementSibling);
+    });
   });
 
-  /* ---------- console ---------- */
+  /* ---------- console: waitlist through the MCP server on oiloop.com ---------- */
   var form = document.getElementById('cform'), out = document.getElementById('cout'), inp = document.getElementById('cin');
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var v = inp.value.trim();
-    if (!v){ out.textContent = 'Enter a work email to continue.'; return; }
+    if (!v){ out.textContent = 'Enter a work email, then press Enter.'; return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ out.textContent = 'That does not look like an email address. Check it and press Enter again.'; return; }
-    function viaMail(){
-      out.textContent = 'Opening your mail app to join the waitlist as ' + v + '. If nothing opens, write to info@oiloop.com.';
-      try { window.open('mailto:info@oiloop.com?subject=' + encodeURIComponent('OI:LOOP early waitlist') + '&body=' + encodeURIComponent('Please add ' + v + ' to the OI:LOOP early waitlist.'), '_blank'); } catch (err) {}
-    }
-    if (!/(^|\.)oiloop\.com$/.test(location.hostname)){ viaMail(); return; }
+    function manual(){ out.textContent = 'Not sent from this page. Email info@oiloop.com with the subject "Early waitlist" and we will add ' + v + '.'; }
+    if (!/(^|\.)oiloop\.com$/.test(location.hostname)){ manual(); return; }
     out.textContent = 'Transmitting…';
     fetch('/mcp', {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json, text/event-stream'},
       body: JSON.stringify({jsonrpc: '2.0', id: 1, method: 'tools/call', params: {name: 'join_waitlist', arguments: {email: v}}})})
@@ -857,7 +1266,7 @@ footer.site .wrap{display:flex;justify-content:space-between;align-items:center;
         if (!res || res.isError){ out.textContent = (res && res.content && res.content[0] ? res.content[0].text + ' ' : '') + 'You can also write to info@oiloop.com.'; return; }
         out.textContent = 'ACCESS QUEUED // ' + res.content[0].text; inp.value = '';
       })
-      .catch(viaMail);
+      .catch(manual);
   });
 })();
 </script>
