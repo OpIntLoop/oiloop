@@ -4,18 +4,19 @@ DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-# Force HTTPS: Cloudflare "Always Use HTTPS" handles this. Do not enable these lines with Cloudflare SSL mode "Flexible" (redirect loop).
-#RewriteCond %{HTTPS} !=on
-#RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# HTTPS is handled by Cloudflare ("Always Use HTTPS"). Do not force it here while Cloudflare SSL mode is "Flexible" (redirect loop).
 
 # Markdown for agents: Accept: text/markdown on the home page returns index.md
 RewriteCond %{HTTP_ACCEPT} text/markdown [NC]
 RewriteRule ^(index\.html)?$ index.md [L]
 
+# Agent discovery
+RewriteRule ^\.well-known/api-catalog/?$ api-catalog.json [L]
+RewriteRule ^\.well-known/mcp\.json$ mcp-card.json [L]
+RewriteRule ^health/?$ health.php [L]
+
 # MCP endpoint
 RewriteRule ^mcp/?$ mcp.php [L,QSA]
-RewriteRule ^\.well-known/mcp\.json$ mcp-card.json [L]
 </IfModule>
 
 AddType text/plain .txt
@@ -29,13 +30,29 @@ AddDefaultCharset UTF-8
 <FilesMatch "\.(txt|json|md|xml)$">
 Header set Access-Control-Allow-Origin "*"
 </FilesMatch>
-<FilesMatch "^(index\.html|index\.md)$">
+# Home page: Link headers for agent discovery (RFC 8288, RFC 9727)
+<Files "index.html">
 Header append Vary "Accept"
-</FilesMatch>
+Header add Link "</.well-known/api-catalog>; rel=\"api-catalog\""
+Header add Link "</openapi.json>; rel=\"service-desc\"; type=\"application/openapi+json\""
+Header add Link "</docs.md>; rel=\"service-doc\"; type=\"text/markdown\""
+Header add Link "</llms.txt>; rel=\"describedby\"; type=\"text/plain\""
+Header add Link "</index.md>; rel=\"alternate\"; type=\"text/markdown\""
+</Files>
 <Files "index.md">
+Header append Vary "Accept"
 Header set Content-Type "text/markdown; charset=utf-8"
 Header set X-Markdown-Tokens "1299"
 </Files>
+<Files "api-catalog.json">
+Header set Content-Type "application/linkset+json; charset=utf-8"
+</Files>
+<Files "openapi.json">
+Header set Content-Type "application/openapi+json; charset=utf-8"
+</Files>
+<FilesMatch "^(docs|auth)\.md$">
+Header set Content-Type "text/markdown; charset=utf-8"
+</FilesMatch>
 <Files "robots.txt">
 Header set Content-Type "text/plain; charset=utf-8"
 </Files>

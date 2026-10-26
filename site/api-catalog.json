@@ -1,0 +1,45 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://oiloop.com/mcp",
+      "service-desc": [
+        {
+          "href": "https://oiloop.com/openapi.json",
+          "type": "application/openapi+json",
+          "title": "OI:LOOP MCP server, OpenAPI 3.1 description"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://oiloop.com/docs.md",
+          "type": "text/markdown",
+          "title": "How to connect to the OI:LOOP MCP server"
+        },
+        {
+          "href": "https://oiloop.com/#mcp",
+          "type": "text/html",
+          "title": "Ask your AI about OI:LOOP"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://oiloop.com/health",
+          "type": "application/json",
+          "title": "Health check"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://oiloop.com/.well-known/mcp.json",
+          "type": "application/json",
+          "title": "MCP server card"
+        },
+        {
+          "href": "https://oiloop.com/llms.txt",
+          "type": "text/plain",
+          "title": "OI:LOOP overview for AI agents"
+        }
+      ]
+    }
+  ]
+}

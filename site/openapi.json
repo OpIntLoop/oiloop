@@ -1,0 +1,103 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OI:LOOP MCP server",
+    "version": "1.0.0",
+    "summary": "Public Model Context Protocol server for OI:LOOP (Streamable HTTP, stateless JSON-RPC 2.0).",
+    "description": "Read-only tools describe OI:LOOP, its passive optical processor, the energy comparison and the facility plan. join_waitlist adds a person to the early API waitlist. No authentication is required. Figures are design targets and models, not measurements.",
+    "contact": { "name": "OI:LOOP", "email": "info@oiloop.com", "url": "https://oiloop.com" },
+    "license": { "name": "MIT", "identifier": "MIT" }
+  },
+  "servers": [ { "url": "https://oiloop.com" } ],
+  "externalDocs": { "description": "Connection guide", "url": "https://oiloop.com/docs.md" },
+  "paths": {
+    "/mcp": {
+      "get": {
+        "operationId": "getServerCard",
+        "summary": "Describe the MCP server",
+        "responses": {
+          "200": {
+            "description": "Server name, transport, endpoint and tool names",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ServerCard" } } }
+          },
+          "405": { "description": "Server-sent event streams are not offered (request sent with Accept: text/event-stream)" }
+        }
+      },
+      "post": {
+        "operationId": "mcpRequest",
+        "summary": "Send an MCP JSON-RPC 2.0 message",
+        "description": "Methods: initialize, ping, tools/list, tools/call, resources/list, resources/read, prompts/list. Notifications return 202 with no body. Tools: about_oiloop, explain_technology, get_energy_comparison, get_facility_projection(year 2-5), join_waitlist(email, name?, company?, use_case?).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/JsonRpcRequest" },
+              "examples": {
+                "listTools": { "value": { "jsonrpc": "2.0", "id": 1, "method": "tools/list" } },
+                "callTool": { "value": { "jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": { "name": "get_facility_projection", "arguments": { "year": 3 } } } }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "JSON-RPC response", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/JsonRpcResponse" } } } },
+          "202": { "description": "Notification accepted" }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Health check",
+        "responses": {
+          "200": { "description": "Service is up", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Health" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "JsonRpcRequest": {
+        "type": "object",
+        "required": ["jsonrpc", "method"],
+        "properties": {
+          "jsonrpc": { "const": "2.0" },
+          "id": { "type": ["string", "integer"] },
+          "method": { "type": "string" },
+          "params": { "type": "object" }
+        }
+      },
+      "JsonRpcResponse": {
+        "type": "object",
+        "required": ["jsonrpc"],
+        "properties": {
+          "jsonrpc": { "const": "2.0" },
+          "id": { "type": ["string", "integer", "null"] },
+          "result": { "type": "object" },
+          "error": {
+            "type": "object",
+            "properties": { "code": { "type": "integer" }, "message": { "type": "string" } }
+          }
+        }
+      },
+      "ServerCard": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "transport": { "type": "string" },
+          "endpoint": { "type": "string", "format": "uri" },
+          "tools": { "type": "array", "items": { "type": "string" } },
+          "docs": { "type": "string", "format": "uri" }
+        }
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["ok"] },
+          "service": { "type": "string" },
+          "time": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
