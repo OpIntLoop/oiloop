@@ -4,21 +4,39 @@ DirectoryIndex index.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-# Force HTTPS: remove the # from the next 3 lines only after the Let's Encrypt certificate is active
+# Force HTTPS: Cloudflare "Always Use HTTPS" handles this. Do not enable these lines with Cloudflare SSL mode "Flexible" (redirect loop).
 #RewriteCond %{HTTPS} !=on
 #RewriteCond %{HTTP:X-Forwarded-Proto} !=https
 #RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Markdown for agents: Accept: text/markdown on the home page returns index.md
+RewriteCond %{HTTP_ACCEPT} text/markdown [NC]
+RewriteRule ^(index\.html)?$ index.md [L]
+
 # MCP endpoint
 RewriteRule ^mcp/?$ mcp.php [L,QSA]
 RewriteRule ^\.well-known/mcp\.json$ mcp-card.json [L]
 </IfModule>
 
-<IfModule mod_headers.c>
-<FilesMatch "\.(txt|json)$">
-Header set Access-Control-Allow-Origin "*"
-</FilesMatch>
-</IfModule>
-
 AddType text/plain .txt
 AddType application/json .json
 AddType image/svg+xml .svg
+AddType application/xml .xml
+AddType text/markdown .md
+AddDefaultCharset UTF-8
+
+<IfModule mod_headers.c>
+<FilesMatch "\.(txt|json|md|xml)$">
+Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+<FilesMatch "^(index\.html|index\.md)$">
+Header append Vary "Accept"
+</FilesMatch>
+<Files "index.md">
+Header set Content-Type "text/markdown; charset=utf-8"
+Header set X-Markdown-Tokens "1299"
+</Files>
+<Files "robots.txt">
+Header set Content-Type "text/plain; charset=utf-8"
+</Files>
+</IfModule>
