@@ -25,6 +25,12 @@
 - Early waitlist and enquiries: info@oiloop.com
 - Website: https://oiloop.com
 
+## Profiles
+- https://www.linkedin.com/company/oiloop/
+- https://x.com/OpIntLoop
+- https://www.instagram.com/o.i.l.o.o.p/
+- https://github.com/OpIntLoop
+
 ## FAQ
 - Q: What is OI:LOOP?
   A: OI:LOOP is an early-stage company that prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility. It does not sell chips.
