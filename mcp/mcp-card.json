@@ -1,0 +1,11 @@
+{
+  "name": "oiloop",
+  "title": "OI:LOOP",
+  "description": "Company, technology, energy comparison, facility plan and early waitlist for OI:LOOP passive optical AI inference.",
+  "version": "1.0.0",
+  "websiteUrl": "https://oiloop.com",
+  "remotes": [{ "type": "streamable-http", "url": "https://oiloop.com/mcp" }],
+  "tools": ["about_oiloop", "explain_technology", "get_energy_comparison", "get_facility_projection", "join_waitlist"],
+  "documentation": "https://oiloop.com/llms.txt",
+  "contact": "info@oiloop.com"
+}

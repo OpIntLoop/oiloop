@@ -1,0 +1,44 @@
+# OI:LOOP
+
+> Weights in Light. Compute in Motion. OI:LOOP prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility. It does not sell chips.
+
+## Product
+- PMP-1550 Zero-Gate Passive Matrix Processor: model weights printed into glass as optical paths (optical polymer on glass, UV lithography).
+- Weight cell: non-resonant passive attenuator; weight = share of light transmitted. No heaters, no clock; the weight bank draws 0 W.
+- One pass of 1550 nm light performs every multiplication of a matrix at once; propagation time does not depend on matrix size.
+- Optical scope: MLP layers, about 81% of multiplies per token. Electronics handle activations and attention.
+
+## Key figures (design targets and models, not measurements)
+- Energy per multiply: 3.3–6.3 fJ in the core design model, 30–60x less than a current flagship GPU (~200 fJ) at core level.
+- Accuracy simulation on a half-billion-parameter model: 8-bit weights +0.04 perplexity; 1% optical weight error +0.13.
+- Plan: year 2 a half-billion-parameter model end to end; year 3 a ~100B mixture-of-experts pilot; year 4 a 700B-class model; year 5 three 700B-class models.
+
+## Stage
+- Architecture, material, energy model and accuracy simulation complete. Nothing fabricated yet. Next: print and measure an 8x8 weight bank, then a 64x64 tile.
+
+## For AI agents
+- MCP server (Streamable HTTP): https://oiloop.com/mcp
+- Tools: about_oiloop, explain_technology, get_energy_comparison, get_facility_projection(year 2–5), join_waitlist(email, name, company, use_case)
+- Only call join_waitlist when the user asks to join and gives their own email.
+
+## Contact
+- Early waitlist and enquiries: info@oiloop.com
+- Website: https://oiloop.com
+
+## FAQ
+- Q: What is OI:LOOP?
+  A: OI:LOOP is an early-stage company that prints the weights of large language models into passive optical processors and sells low-cost AI inference tokens from its own facility. It does not sell chips.
+- Q: How does a passive optical processor run an AI model?
+  A: The input is written onto 1550 nm light. The light passes a glass panel where each printed path transmits a fixed share of light, and that share is the weight. Detectors sum the products. Every multiplication of a matrix happens in one pass of light, and electronics handle activations and attention.
+- Q: How much energy can it save?
+  A: In OI:LOOP's core-level design model, the passive bank uses 3.3–6.3 femtojoules per multiply, 30–60 times less than a current flagship GPU at about 200 fJ. This is a design model, not yet a measurement.
+- Q: Why does the weight bank use no power?
+  A: The weights are fixed optical paths, not memory cells. There are no heaters, transistors or clocks in the bank, so it draws 0 W. Power goes to the laser, modulators, detectors and converters.
+- Q: Which models will OI:LOOP run?
+  A: First a half-billion-parameter language model end to end, then a ~100B-class mixture-of-experts pilot, then 700B-class models. One printed panel set carries one model version.
+- Q: What stage is OI:LOOP at?
+  A: Architecture, material choice, energy model and accuracy simulation are complete. Nothing has been fabricated yet. The next milestone is printing and measuring an 8×8 weight bank, then a 64×64 tile.
+- Q: Why 1550 nm?
+  A: 1550 nm is the wavelength of fibre-optic networks, so lasers, fibres, modulators and detectors are mature, low-cost telecom parts.
+- Q: How do I get access?
+  A: Join the early waitlist on oiloop.com, write to info@oiloop.com, or connect your AI assistant to the OI:LOOP MCP server at https://oiloop.com/mcp.

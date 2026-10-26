@@ -1,0 +1,24 @@
+# OI:LOOP
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Force HTTPS: remove the # from the next 3 lines only after the Let's Encrypt certificate is active
+#RewriteCond %{HTTPS} !=on
+#RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# MCP endpoint
+RewriteRule ^mcp/?$ mcp.php [L,QSA]
+RewriteRule ^\.well-known/mcp\.json$ mcp-card.json [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+<FilesMatch "\.(txt|json)$">
+Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+</IfModule>
+
+AddType text/plain .txt
+AddType application/json .json
+AddType image/svg+xml .svg
